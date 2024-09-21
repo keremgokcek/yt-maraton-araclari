@@ -1,5 +1,7 @@
 import Timer from './timer.js';
 
+const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+
 function hideDays() {
     document.getElementById("day-box").style.opacity = 0;
     var visibleBoxes = document.querySelectorAll('.box');
@@ -45,7 +47,7 @@ window.onload = () => {
     timer.startCountdown();
 
     function connectWebsocket() {
-        const ws = new WebSocket(`ws://${window.location.host}/socket/maraton`);
+        const ws = new WebSocket(`${protocol}://${window.location.host}/socket/maraton`);
         var interval;
         
         ws.addEventListener('open', () => {

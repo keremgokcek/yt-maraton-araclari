@@ -1,3 +1,4 @@
+const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
 const element_ids = ['add-time', 'remove-time', 'adjust-time']
 var circle;
 
@@ -26,7 +27,7 @@ var ws;
 connectWebsocket();
 
 function connectWebsocket() {
-    ws = new WebSocket(`ws://${window.location.host}/socket/panel`);
+    ws = new WebSocket(`${protocol}://${window.location.host}/socket/panel`);
 
     ws.addEventListener('open', () => {
         console.log('Connected to WebSocket server');
