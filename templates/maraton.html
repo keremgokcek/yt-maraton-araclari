@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/maraton.css?asdas">
+    <script>
+        var timestamp = '{{ timestamp }}';
+        var days_hidden = '{{ days_hidden }}' === 'True';
+        var stopped = '{{ stopped }}' === 'True';
+    </script>
+    <script type="module" src="/static/js/maraton.js"></script>
+    <title>Maraton sayacı</title>
+</head>
+<body>
+    <div class="container">
+        {% if days_hidden %}
+        <div class="box" id="day-box" style="display: none; opacity: 0;">
+            <div class="digits" id="days">{{ time_metrics.days }}</div>
+            <div class="identifier">GÜN</div>
+        </div>
+        {% else %}
+        <div class="box" id="day-box">
+            <div class="digits" id="days">{{ time_metrics.days }}</div>
+            <div class="identifier">GÜN</div>
+        </div>
+        {% endif %}
+        <div class="box" id="hour-box">
+            <div class="digits" id="hours">{{ time_metrics.hours }}</div>
+            <div class="identifier">SAAT</div>
+        </div>
+        <div class="box" id="minute-box">
+            <div class="digits" id="minutes">{{ time_metrics.minutes }}</div>
+            <div class="identifier">DAKİKA</div>
+        </div>
+        <div class="box" id="second-box">
+            <div id="new-donation-box" style="display: none;">
+                <div id="donator-name">MKerem</div>
+                <div id="donate-time">+50 DAKİKA</div>
+            </div>
+            <div id="donations"></div>
+            <div class="digits" id="seconds">{{ time_metrics.seconds }}</div>
+            <div class="identifier">SANİYE</div>
+        </div>
+    </div>
+</body>
+</html>

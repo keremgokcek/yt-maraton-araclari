@@ -1,0 +1,185 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #b8884e;
+    height: 100%;
+}
+
+.user-profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    background-color: #690101;
+    color: white;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+    height: calc(100vh - 40px);
+    margin: 0;
+}
+
+@media screen and (max-width: 850px) {
+    .content {
+        flex-direction: column;
+	margin: 20px 0;
+	height: fit-content;
+    }
+}
+
+div.select-method {
+    background-color:#f0f0f0;
+    border: 1px solid black;
+    width: 400px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+div#timer-settings-box {
+    background-color: #f0f0f0;
+    border: 1px solid black;
+    width: 400px;
+    border-radius: 10px;
+    height: 85px;
+    align-items: center;
+    display: flex;
+    justify-content: center
+}
+
+.options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px;
+}
+
+.options ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.options ul li {
+    display: inline;
+    text-decoration: none;
+    color: white;
+    font-size: 1em;
+    padding: 8px;
+    border-radius: 5px;
+    background-color: #5b5b5b;
+    transition: 0.25s;
+    outline: 2px solid transparent;
+    cursor: pointer;
+    margin: 0 2px;
+}
+
+.selected {
+    outline: 2px solid black !important;
+    background-color: #2e4cd2 !important;
+}
+
+#input-box {
+    width: 400px;
+    height: 300px;
+    background-color: #f0f0f0;
+    border: 1px solid black;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#input-box > div {
+    margin-top: 20px;
+}
+
+input[type="number"], input[type="text"], input[type="datetime-local"] {
+    width: 250px;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid black;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    transition: 0.2s;
+}
+
+input[type="number"]:focus, input[type="text"]:focus, input[type="datetime-local"]:focus {
+    background-color: #242424;
+    color: white;
+    outline: 2px solid greenyellow;
+    cursor: text;
+}
+
+.log-box {
+    width: 400px;
+    background-color: #f0f0f0;
+    border: 1px solid black;
+    border-radius: 10px;
+    height: 490px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.log-body {
+    height: 100%;
+    width: 100%;
+}
+
+.log-title {
+    font-size: 1.5em;
+    margin-top: 10px;
+}
+
+#submit, #stop-timer, #start-timer {
+    width: 100px;
+    padding: 10px;
+    margin: 5px 0;
+    border: 0px solid black;
+    border-radius: 5px;
+    background-color: #5b5b5b;
+    color: white;
+    transition: 0.2s;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.2s;
+}
+
+#submit:hover, #stop-timer:hover, #start-timer:hover, .options ul li:hover {
+    background-color: #2e4cd2;
+    box-shadow: 0 0 5px 0px black;
+}
+
+#add-time, #remove-time, #adjust-time {
+    margin: 5px 0;
+    border: 0px solid black;
+    border-radius: 5px;
+    transition: 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+
+div.indicator {
+    width: 38px;
+    height: 20px;
+    padding: 9px 0;
+    border-radius: 4px;
+    background-color: #5b5b5b;
+    display: inline-flex;
+    margin-right: 5px;
+    justify-content: center;
+}
+
+div.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid black;
+    box-sizing: border-box;
+    transition: 0.4s;
+}

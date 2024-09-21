@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        var stopped = '{{ stopped }}' === 'True';
+    </script>
+    <script src="/static/js/panel.js"></script>
+    <link rel="stylesheet" href="/static/css/panel.css">
+    <title>Yönetim paneli</title>
+</head>
+<body>
+    <div class="user-profile">
+        {{ username }} olarak giriş yapıldı.
+    </div>
+    <div class="content">
+        <div class="control-box">
+            <div class="select-method">
+                <div class="options" id="selection-options">
+                    <ul>
+                        <li class="selected">Zaman ekle</li>
+                        <li>Zaman çıkar</li>
+                        <li>Zaman ayarla</li>
+                    </ul>
+                </div>
+            </div>
+            <div id="input-box">
+                <div id="add-time">
+                    <div class="textbox">
+                        <input id="minutes" type="number" name="minutes" placeholder="Dakika" title="" required>
+                    </div>
+                    <div class="textbox">
+                        <input id="name" type="text" name="name" placeholder="Bağışçı Adı" title="" required>
+                    </div>
+                    <a onclick='add_submit()' id="submit">Gönder</a>
+                </div>
+                <div id="remove-time" style="display: none;">
+                    <div class="textbox">
+                        <input id="minutes" type="number" name="minutes" placeholder="Sil" title="" required>
+                    </div>
+                    <a onclick='submit' id="submit">Gönder</a>
+                </div>
+                <div id="adjust-time" style="display: none;">
+                    <div class="textbox">
+                        <input id="date" type="datetime-local" name="date" placeholder="Ayarla" title="" value="2024-08-01T13:00" required>
+                    </div>
+                    <a onclick='set_submit()' id="submit">Gönder</a>
+                </div>
+            </div>
+            <div id="timer-settings-box">
+                <div class="indicator">
+                    <div class="circle"></div>
+                </div>
+                <div class="" id="timer-settings">
+                    <a onclick='startTimer()' id="start-timer">Zamanı devam ettir</a>
+                    <a onclick='stopTimer()' id="stop-timer">Zamanı durdur</a>
+                </div>
+            </div>
+        </div>
+        <div class="log-box">
+            <div class="log-title">Son değişiklikler (islevsiz)</div>
+            <div class="log-body"></div>
+        </div>
+    </div>
+</body>
+</html>

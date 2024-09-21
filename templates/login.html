@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/login.css">
+    <title>Giriş yap</title>
+</head>
+<body>
+    <div class="login-box">
+        {% if error %}
+        <div class="error-box">{{ error }}</div>
+        {% endif %}
+        <form action="/login" method="post">
+            <div class="textbox">
+                <input type="text" name="username" placeholder="Kullanıcı adı" title="" required>
+            </div>
+            <div class="textbox">
+                <input type="password" name="password" placeholder="Şifre" title="" required>
+            </div>
+            <input type="submit" class="btn" value="Giriş yap">
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-image: url('../images/carbon_fibre.png');
+    background-repeat: repeat;
+}
+
+div.error-box {
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 30px;
+    margin-bottom: 20px;
+    width: 210px;
+    background-color: rgba(255, 0, 0, 0.4);
+}
+
+div.login-box {
+    display: inline-block;
+    padding: 60px;
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: #575757;
+}
+
+div.textbox {
+    margin: 0;
+    text-align: center;
+}
+
+div.textbox input {
+    width: 250px;
+    padding: 10px;
+    margin: 5px 0;
+    border: 0px solid black;
+    border-radius: 5px;
+}
+
+input.btn {
+    margin: 20px 0 0;
+    text-align: center;
+    padding: 6px 18px;
+    border: 0px solid black;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+form {
+    display: inline-block;
+    margin: 0;
+    text-align: center;
+}
+
+input {
+    transition: 0.25s;
+    outline: 2px solid transparent;
+    cursor: default;
+}
+
+input:hover {
+    background-color: #d7d7d7;
+}
+
+input:focus {
+    background-color: #242424;
+    color: white;
+    outline: 2px solid greenyellow;
+    cursor: text;
+}
+
+input.btn:hover {
+    background-color: #242424;
+    color: white;
+    outline: 2px solid greenyellow;
+}

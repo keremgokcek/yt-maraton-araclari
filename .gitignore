@@ -1,0 +1,7 @@
+config.json
+.env
+*.log
+__pycache__
+env
+test-panel
+streamlabs-socket

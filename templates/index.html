@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <title>Ana sayfa</title>
+</head>
+<body>
+    <div>
+        {% if authorized %}
+            <h1>Hoş geldiniz, {{ username }}</h1>
+            <a href="/panel">Panele git</a>
+        {% else %}
+            <h1>Hoş geldiniz</h1>
+            <a href="/login">Giriş yap</a>
+        {% endif %}
+        <a href="/maraton">Sayaca git</a>
+    </div>
+</body>
+</html>
