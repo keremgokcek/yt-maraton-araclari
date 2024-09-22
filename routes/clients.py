@@ -1,5 +1,4 @@
-from quart import Blueprint, render_template, current_app
-from quart_auth import current_user
+from quart import Blueprint, current_app
 from quart_auth import login_required
 
 
