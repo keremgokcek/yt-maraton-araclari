@@ -127,13 +127,15 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="datetime-local
 .log-title {
     font-size: 1.5em;
     margin-top: 10px;
-    padding: 10px 20px 0;
+    padding: 5px 20px 14px;
+    border-bottom: 1px solid black;
+    text-align: center;
 }
 
 .log-body {
     height: 100%;
     width: 100%;
-    padding: 20px;
+    padding: 10px 20px;
     overflow-y: auto;
     box-sizing: border-box;
     display: flex;
