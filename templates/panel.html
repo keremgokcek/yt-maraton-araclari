@@ -59,8 +59,18 @@
             </div>
         </div>
         <div class="log-box">
-            <div class="log-title">Son değişiklikler (islevsiz)</div>
-            <div class="log-body"></div>
+            <div class="log-title">Değişiklik Kaydı</div>
+            <div class="log-body">
+                {% for log in logs %}
+                <div class="log-card">
+                    <div class="log-card-content">
+                        <div class="log-card-author">{{ log.get('author') }}</div>
+                        <div class="log-card-date" title="{{ log.get('full_date') }}">{{ log.get('date') }}</div>
+                    </div>
+                    <div class="log-card-message">{{ log.get('message') }}</div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </body>

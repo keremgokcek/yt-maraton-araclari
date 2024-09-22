@@ -26,6 +26,22 @@ class DonationType(Enum):
         return self.value
 
 
+def get_display_time(iso_time: str) -> str:
+    time = datetime.datetime.fromisoformat(iso_time)
+    delta = datetime.datetime.now(datetime.timezone.utc) - time
+    if delta.days == 0:
+        if delta.seconds < 60:
+            return 'Az önce'
+        elif delta.seconds < 3600:
+            return f"{delta.seconds // 60} dakika önce"
+        else:
+            return f"{delta.seconds // 3600} saat önce"
+    elif delta.days == 1:
+        return 'Dün'
+    else:
+        return f"{delta.days} gün önce"
+
+
 async def get_user_data(username: str, password: str) -> Optional[int]:
     with open('logins.json') as f:
         logins = json.load(f)

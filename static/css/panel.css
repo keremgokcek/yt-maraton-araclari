@@ -122,17 +122,44 @@ input[type="number"]:focus, input[type="text"]:focus, input[type="datetime-local
     height: 490px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-}
-
-.log-body {
-    height: 100%;
-    width: 100%;
 }
 
 .log-title {
     font-size: 1.5em;
     margin-top: 10px;
+    padding: 10px 20px 0;
+}
+
+.log-body {
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.log-card {
+    width: 100%;
+    background-color: #d0d0d0;
+    border: 1px solid black;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    transition: 0.2s;
+    padding: 10px;
+    box-sizing: border-box;
+    flex-direction: column;
+}
+
+.log-card-content {
+    font-size: 0.8em;
+    color: #3b3b3b;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 #submit, #stop-timer, #start-timer {

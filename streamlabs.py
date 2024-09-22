@@ -19,9 +19,9 @@ class Streamlabs(socketio.AsyncClient):
     async def event_handler(self, data) -> None:
         if parsed_data := await process_data(data):
             self.app.log_event({
-                "timestamp": datetime.now().isoformat(),
+                "timestamp": datetime.now().astimezone().isoformat(),
                 "type": EventType.ADD_TIME,
-                "username": None,
+                "username": 'Sistem',
                 "donator": parsed_data['name'],
                 "donate_type": parsed_data['type'],
                 "minutes": parsed_data['time'],

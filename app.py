@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from json import load, dumps
 from os import getenv, listdir
 from importlib import import_module
+from locale import setlocale, LC_TIME
 import orjson
 
 load_dotenv()
@@ -30,6 +31,8 @@ class CustomApp(Quart):
         
         self.register_error_handler(Unauthorized, self.unauthorized)
         
+        setlocale(LC_TIME, 'tr_TR.UTF-8')
+
     def get_date(self) -> datetime:
         end_date = self.app_config['end-date']
         pause_date = self.app_config['pause-date']
