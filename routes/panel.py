@@ -119,7 +119,7 @@ async def panel_socket():
                 config = current_app.app_config
                 
                 if json_data['type'] == 'add':
-                    current_app.set_date(datetime.fromisoformat(config['end-date']) + timedelta(minutes=int(json_data['time'])))
+                    current_app.set_date(datetime.fromisoformat(config['end-date']) + timedelta(minutes=float(json_data['time'])))
                     current_app.variables.days_hidden = not bool((datetime.fromisoformat(config['end-date']) - datetime.now()).days)
                     
                     await current_app.connections.maraton.publish(message)

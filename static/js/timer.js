@@ -16,6 +16,16 @@ class Timer {
         this.wait_time = 0;
     }
 
+    createDonationString(minutes) {
+        if (minutes < 1) {
+            return `+${Math.floor(minutes*60)} SANİYE`
+        } else if (minutes < 20) {
+            return `+${parseFloat(minutes.toFixed(2))} DAKİKA`
+        } else {
+            return `+${Math.floor(minutes)} DAKİKA`
+        }
+    }
+
     getSeconds() {
         if (this.stopped_seconds) {
             return this.stopped_seconds;
@@ -153,7 +163,7 @@ class Timer {
 
         var donateAmount = document.createElement('div');
         donateAmount.id = 'donate-time';
-        donateAmount.innerHTML = '+' + time + ' DAKİKA';
+        donateAmount.innerHTML = this.createDonationString(time);
 
         var donatorName = document.createElement('div');
         donatorName.id = 'donator-name';

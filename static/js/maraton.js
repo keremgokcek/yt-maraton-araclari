@@ -86,7 +86,7 @@ window.onload = () => {
             } else {
                 var json_data = JSON.parse(event.data);
                 var minutes = parseFloat(json_data['time']);
-                timer.createDonation(parseInt(minutes), json_data['name']);
+                timer.createDonation(parseFloat(minutes), json_data['name']);
                 await timer.addTime(minutes);
             }
         });
