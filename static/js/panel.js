@@ -33,6 +33,9 @@ function connectWebsocket() {
 
     ws.addEventListener('open', () => {
         console.log('Connected to WebSocket server');
+        interval = setInterval(() => {
+            ws.send('ping');
+        }, 60000);
     });
 
     ws.addEventListener('error', (event) => {
@@ -49,6 +52,7 @@ function connectWebsocket() {
 
     ws.addEventListener('message', (event) => {
         console.log('Message from server:', event.data);
+        if (event.data === 'ping') return;
         const data = JSON.parse(event.data);
         if (data.type === 'log') {
             const logCard = createLogCard(data.message, data.username, data.timestamp);

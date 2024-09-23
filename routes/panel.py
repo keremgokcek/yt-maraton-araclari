@@ -69,7 +69,9 @@ async def panel_socket():
     try:
         while True:
             message = await websocket.receive()
-            if message == "stop":
+            if message == "ping":
+                await websocket.send("ping")
+            elif message == "stop":
                 if current_app.app_config['pause-date']:
                     return
                 config = current_app.app_config
