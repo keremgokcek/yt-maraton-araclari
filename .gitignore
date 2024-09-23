@@ -1,7 +1,6 @@
-config.json
 .env
+*.json
 *.log
-logins.json
 __pycache__
 env
 test-panel
