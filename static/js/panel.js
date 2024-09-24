@@ -23,6 +23,15 @@ window.onload = () => {
     circle.style.background = stopped ? 'red' : 'green';
 
     log_body = document.querySelector('.log-body');
+
+    setInterval(() => {
+        const cards = document.querySelectorAll('.log-card');
+        cards.forEach(card => {
+            const timestamp = card.getAttribute('data-timestamp');
+            const displayDate = formatDisplayDate(timestamp);
+            card.querySelector('.log-card-date').textContent = displayDate;
+        });
+    }, 1000);
 }
 
 var ws;
@@ -127,6 +136,7 @@ function formatFullDate(timestamp) {
 function createLogCard(message, username, timestamp) {
     const logCard = document.createElement('div');
     logCard.className = 'log-card';
+    logCard.setAttribute('data-timestamp', timestamp);
 
     const logCardContent = document.createElement('div');
     logCardContent.className = 'log-card-content';

@@ -62,7 +62,7 @@
             <div class="log-title">Değişiklik Kaydı</div>
             <div class="log-body">
                 {% for log in logs %}
-                <div class="log-card">
+                <div class="log-card" data-timestamp="{{ log.get('timestamp') }}">
                     <div class="log-card-content">
                         <div class="log-card-author">{{ log.get('author') }}</div>
                         <div class="log-card-date" title="{{ log.get('full_date') }}">{{ log.get('date') }}</div>

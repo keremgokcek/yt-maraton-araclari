@@ -39,7 +39,8 @@ async def panel_page():
         temp_log = {
             "author": raw_log['username'],
             "full_date": datetime.fromisoformat(raw_log['timestamp']).strftime('%-d %B %Y %H.%M'),
-            "date": get_display_time(raw_log['timestamp'])
+            "date": get_display_time(raw_log['timestamp']),
+            "timestamp": raw_log['timestamp']
         }
         match EventType[raw_log['type'].upper()]:
             case EventType.PAUSE_TIMER:
