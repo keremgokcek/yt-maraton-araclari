@@ -2,14 +2,13 @@ from quart import Quart, redirect
 from quart_auth import Unauthorized
 from types import SimpleNamespace
 from connections import ConnectionHandler
-from datetime import datetime, timedelta
+from datetime import datetime
 from streamlabs import Streamlabs
 from dotenv import load_dotenv
-from json import load, dumps
 from os import getenv, listdir
 from importlib import import_module
 from locale import setlocale, LC_TIME
-import orjson
+from orjson import dumps, loads, OPT_INDENT_2
 
 load_dotenv()
 
@@ -23,7 +22,9 @@ class CustomApp(Quart):
         self.connections.maraton = ConnectionHandler()
         self.connections.panel = ConnectionHandler()
         
-        self.app_config = load(open('config.json'))
+        # self.app_config = load(open('config.json'))
+        with open('config.json') as f:
+            self.app_config = loads(f.read())
         
         self.variables.days_hidden = not bool((self.get_date() - datetime.now()).days)
         
@@ -43,14 +44,14 @@ class CustomApp(Quart):
             
     def set_date(self, date: datetime) -> None:
         self.app_config['end-date'] = date.isoformat()
-        with open('config.json', 'w') as f:
+        with open('config.json', 'wb') as f:
             f.write(dumps(self.app_config))
             
     def log_event(self, data: dict) -> None:
-        log = orjson.loads(open('events.log', 'rb').read())
+        log = loads(open('events.log', 'rb').read())
         log.append(data)
         with open('events.log', 'wb') as f:
-            f.write(orjson.dumps(log, option=orjson.OPT_INDENT_2))
+            f.write(dumps(log, option=OPT_INDENT_2))
 
     async def startup(self) -> None:
         await self.streamlabs.connect(getenv('STREAMLABS_SOCKET_TOKEN'))

@@ -1,10 +1,9 @@
-from json import dumps, loads
 from datetime import datetime, timedelta
 from quart_auth import login_required, current_user
 from quart import Blueprint, render_template, current_app, redirect, websocket
 from tools import EventType, get_display_time
 from asyncio import create_task
-import orjson
+from orjson import dumps, loads
 
 panel = Blueprint('panel_page', __name__, template_folder='templates')
 
@@ -16,7 +15,7 @@ async def send_message(connection):
 @login_required
 async def restart_clients():
     await current_app.connections.maraton.publish("restart")
-    await current_app.connections.panel.publish(orjson.dumps({
+    await current_app.connections.panel.publish(dumps({
         "type": "log",
         "message": "Sayaca bağlı olan sayfalar yeniden başlatıldı.",
         "username": await current_user.username,
@@ -32,7 +31,7 @@ async def restart_clients():
 @panel.route('/panel')
 @login_required
 async def panel_page():
-    raw_logs = orjson.loads(open('events.log', 'rb').read())[-25:]
+    raw_logs = loads(open('events.log', 'rb').read())[-25:]
     logs = []
 
     for raw_log in raw_logs:
@@ -76,12 +75,12 @@ async def panel_socket():
                 if current_app.app_config['pause-date']:
                     return
                 config = current_app.app_config
-                with open('config.json', 'w') as f:
+                with open('config.json', 'wb') as f:
                     config['pause-date'] = datetime.now().isoformat()
                     f.write(dumps(config))
                 
                 await current_app.connections.maraton.publish("stop")
-                await current_app.connections.panel.publish(orjson.dumps({
+                await current_app.connections.panel.publish(dumps({
                     "type": "log",
                     "message": "Sayaç durduruldu.",
                     "username": await current_user.username,
@@ -98,13 +97,13 @@ async def panel_socket():
                 if not current_app.app_config['pause-date']:
                     return
                 config = current_app.app_config
-                with open('config.json', 'w') as f:
+                with open('config.json', 'wb') as f:
                     config['end-date'] = (datetime.fromisoformat(config['end-date']) + (datetime.now() - datetime.fromisoformat(config['pause-date']))).isoformat()
                     config['pause-date'] = None
                     f.write(dumps(config))
                     
                 await current_app.connections.maraton.publish("start")
-                await current_app.connections.panel.publish(orjson.dumps({
+                await current_app.connections.panel.publish(dumps({
                     "type": "log",
                     "message": "Sayaç devam ettirildi.",
                     "username": await current_user.username,
@@ -126,7 +125,7 @@ async def panel_socket():
                     current_app.variables.days_hidden = not bool((datetime.fromisoformat(config['end-date']) - datetime.now()).days)
                     
                     await current_app.connections.maraton.publish(message)
-                    await current_app.connections.panel.publish(orjson.dumps({
+                    await current_app.connections.panel.publish(dumps({
                         "type": "log",
                         "message": f"{json_data['name']} tarafından {json_data['time']} dakika uzatıldı." if json_data['name'] else f"{json_data['time']} dakika eklendi.",
                         "username": await current_user.username,
@@ -145,13 +144,13 @@ async def panel_socket():
                     current_app.set_date(datetime.fromisoformat(json_data['date']))
                     current_app.app_config['pause-date'] = None
                     
-                    with open('config.json', 'w') as f:
+                    with open('config.json', 'wb') as f:
                         f.write(dumps(current_app.app_config))
                     
                     current_app.variables.days_hidden = not bool((datetime.fromisoformat(config['end-date']) - datetime.now()).days)
 
                     await current_app.connections.maraton.publish(f'countdown {int(current_app.get_date().timestamp()*1000)}')
-                    await current_app.connections.panel.publish(orjson.dumps({
+                    await current_app.connections.panel.publish(dumps({
                         "type": "log",
                         "message": f"Sayaç {datetime.fromisoformat(json_data['date']).strftime('%-d %B %Y %H.%M')} tarihine ayarlandı.",
                         "username": await current_user.username,

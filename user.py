@@ -1,6 +1,5 @@
 from quart_auth import AuthUser
-from tools import get_user_data
-from json import load
+from orjson import loads
 
 
 class User(AuthUser):
@@ -11,7 +10,7 @@ class User(AuthUser):
        
     async def set_username(self):
         with open('logins.json') as f:
-            logins = load(f)
+            logins = loads(f.read())
             
         for user, data in logins.items():
             if data['id'] == self.id:

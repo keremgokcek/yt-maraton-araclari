@@ -1,8 +1,8 @@
-import json
-import datetime
+from enum import Enum
+from orjson import loads
 from typing import Optional
 from types import SimpleNamespace
-from enum import Enum
+from datetime import datetime, timezone
 
 
 class EventType(Enum):
@@ -27,8 +27,8 @@ class DonationType(Enum):
 
 
 def get_display_time(iso_time: str) -> str:
-    time = datetime.datetime.fromisoformat(iso_time)
-    delta = datetime.datetime.now(datetime.timezone.utc) - time
+    time = datetime.fromisoformat(iso_time)
+    delta = datetime.now(timezone.utc) - time
     if delta.days == 0:
         if delta.seconds < 60:
             return 'Az önce'
@@ -44,7 +44,7 @@ def get_display_time(iso_time: str) -> str:
 
 async def get_user_data(username: str, password: str) -> Optional[int]:
     with open('logins.json') as f:
-        logins = json.load(f)
+        logins = loads(f.read())
     
     pair = logins.get(username)
     
@@ -108,9 +108,9 @@ async def process_data(data: dict) -> Optional[dict]:
     else:
         print(f"Else {data['type']}")
 
-def get_time_metrics(date: datetime.datetime) -> SimpleNamespace:
+def get_time_metrics(date: datetime) -> SimpleNamespace:
     # Return time metrics between now and timestamp
-    delta = date - datetime.datetime.now()
+    delta = date - datetime.now()
     return SimpleNamespace(
         days=str(delta.days).zfill(2),
         hours=str(delta.seconds // 3600).zfill(2),
