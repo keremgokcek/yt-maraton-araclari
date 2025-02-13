@@ -59,6 +59,7 @@ class CustomApp(Quart):
     
     async def shutdown(self) -> None:
         print('Shutting down')
+        await self.streamlabs.shutdown()
         return await super().shutdown()
     
     async def unauthorized(self, *_):

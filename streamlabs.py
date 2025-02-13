@@ -9,7 +9,7 @@ URL = "https://sockets.streamlabs.com?token={}"
 
 class Streamlabs(socketio.AsyncClient):
     def __init__(self, app) -> None:
-        super().__init__()
+        super().__init__(handle_sigint=False)
         self.app = app
         self.on('event', self.event_handler)
         

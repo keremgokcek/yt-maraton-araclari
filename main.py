@@ -21,7 +21,4 @@ def add_header(response):
     return response
 
 if __name__ == '__main__':
-    try:
-        app.run(port=8080, debug=True, host='0.0.0.0')
-    except BaseException:
-        pass
+    app.run(port=8080, debug=True, host='0.0.0.0')
