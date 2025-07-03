@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/static/css/donate-goal.css" />
+        <script src="/static/js/donate-goal.js"></script>
+        <title>Donate Goal</title>
+    </head>
+    <body>
+        <div id="container">
+            <div id="title">{{ title }}</div>
+            <div id="bar">
+                <div id="progress" style="width: {{ current / goal * 100 }}%"></div>
+                <div id="percent">{{ current | round(2) }} TL ({{ (current / goal * 100) | round(2, 'floor') }}%)</div>
+            </div>
+            <div id="footer">
+                <span id="zero">0 TL</span>
+                <span id="due-date" style="display: none"></span>
+                <span id="goal">{{ goal }} TL</span>
+            </div>
+        </div>
+    </body>
+</html>
