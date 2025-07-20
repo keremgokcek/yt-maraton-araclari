@@ -102,7 +102,7 @@ class Streamlabs(AsyncClient):
                             amount = 50
                         case 'Kanalın Sahibi':
                             amount = 100
-                        case 'Büyük Sponsor':
+                        case 'Büyük Sponsor ':
                             amount = 650
                         case _:
                             print(
