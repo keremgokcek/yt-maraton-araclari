@@ -33,7 +33,7 @@ window.onload = () => {
     };
 
     function connectWebsocket(): void {
-        const ws = new WebSocket(`${protocol}://${window.location.host}/ws/view/donate-goal`);
+        const ws = new WebSocket(`${protocol}://${window.location.host}/view/donate-goal`);
         var interval: number;
 
         ws.addEventListener("open", () => {

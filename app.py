@@ -1,10 +1,11 @@
 from quart import Quart
 from streamlabs import Streamlabs
 from dotenv import load_dotenv
-from os import getenv
+from os import getenv, listdir
 from locale import setlocale, LC_TIME
 from json import load
 from types import SimpleNamespace
+from importlib import import_module
 from connection import ConnectionHandler
 
 load_dotenv()
@@ -29,3 +30,10 @@ class CustomApp(Quart):
         print('Shutting down Quart server...')
         await self.streamlabs.shutdown()
         return await super().shutdown()
+
+    def register_blueprint_folder(self, folder: str, **options) -> None:
+        for file in listdir(folder):
+            if file.endswith('.py'):
+                module = import_module(f'{folder}.{file[:-3]}')
+                blueprint = getattr(module, file[:-3])
+                blueprint.register(self, options)

@@ -1,0 +1,29 @@
+from quart import Blueprint, current_app, render_template, websocket
+from donation import Donation, DonationType
+
+donate_goal = Blueprint('donate_goal', __name__, template_folder='templates')
+
+
+@donate_goal.route('/view/donate-goal')
+async def view():
+    donate_goal_cfg = current_app.app_config['donate-goal']
+    return await render_template(
+        'view/donate-goal.html',
+        current=donate_goal_cfg['current'],
+        goal=donate_goal_cfg['goal'],
+        title=donate_goal_cfg['title'],
+    )
+
+
+@donate_goal.websocket('/view/donate-goal')
+async def view_socket():
+    await websocket.accept()
+    async for data in current_app.connections.donate_goal.subscribe():
+        if isinstance(data, Donation):
+            if data.kind != DonationType.DONATION:
+                data.amount *= 0.65
+
+            await websocket.send_json(data.to_dict())
+
+        else:
+            await websocket.send(data)
