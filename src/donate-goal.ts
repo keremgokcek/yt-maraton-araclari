@@ -10,6 +10,9 @@ enum DonationType {
 interface Donation {
     amount: number;
     kind: DonationType;
+    donator: string;
+    message?: string;
+    channel_id?: string;
 }
 
 interface State {

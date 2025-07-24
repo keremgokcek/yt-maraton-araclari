@@ -55,7 +55,14 @@ class Streamlabs(AsyncClient):
                     usd_amount = float(data['message'][0]['amount'])
                     amount = usd_amount * USD_TO_TRY
 
-                await self._publish(Donation(amount, DonationType.DONATION))
+                donator = data['message'][0]['name']
+                message = data['message'][0]['message']
+
+                donation = Donation(
+                    amount, DonationType.DONATION, donator, message
+                )
+
+                await self._publish(donation)
 
             case 'superchat':  # YouTube Superchats
                 raw_amount = int(data['message'][0]['amount']) / 1000000
@@ -71,7 +78,19 @@ class Streamlabs(AsyncClient):
                     )
                     return
 
-                await self._publish(Donation(amount, DonationType.SUPERCHAT))
+                donator = data['message'][0]['name']
+                message = data['message'][0].get('comment')
+                channel_id = data['message'][0]['channelId']
+
+                donation = Donation(
+                    amount,
+                    DonationType.SUPERCHAT,
+                    donator,
+                    message,
+                    channel_id,
+                )
+
+                await self._publish(donation)
 
             case 'subscription':  # YouTube Memberships
                 """
@@ -109,9 +128,18 @@ class Streamlabs(AsyncClient):
                                 f"DEBUG: {data['message'][0]['membershipLevelName']} unsupported"
                             )
                             return
-                    await self._publish(
-                        Donation(amount, DonationType.MEMBERSHIP)
+
+                    donator = data['message'][0]['name']
+                    channel_id = data['message'][0]['id']
+
+                    donation = Donation(
+                        amount,
+                        DonationType.MEMBERSHIP,
+                        donator,
+                        channel_id=channel_id,
                     )
+
+                    await self._publish(donation)
 
             case 'membershipGift':  # YouTube Membership Gifts
                 if 'giftMembershipsCount' not in data['message'][0]:
@@ -119,10 +147,17 @@ class Streamlabs(AsyncClient):
                     return  # Membership gift redemption announce
 
                 amount = data['message'][0]['giftMembershipsCount'] * 10
+                donator = data['message'][0]['name']
+                channel_id = data['message'][0]['id']
 
-                await self._publish(
-                    Donation(amount, DonationType.MEMBERSHIP_GIFT)
+                donation = Donation(
+                    amount,
+                    DonationType.MEMBERSHIP_GIFT,
+                    donator,
+                    channel_id=channel_id,
                 )
+
+                await self._publish(donation)
 
             case _:
                 # Skip unnecessary events
