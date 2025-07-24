@@ -35,7 +35,7 @@ class Streamlabs(AsyncClient):
             self.app.app_config['donate-goal']['current'] += data.amount * 0.65
 
         with open('config.json', 'w') as f:
-            dump(self.app.app_config, f)
+            dump(self.app.app_config, f, indent=4)
 
         await self.app.connections.donate_goal.publish(data)
 
