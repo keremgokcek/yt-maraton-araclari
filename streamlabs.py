@@ -131,6 +131,7 @@ class Streamlabs(AsyncClient):
                     'follow',
                     'streamlabels',
                     'streamlabels.underlying',
+                    'eventsPanelSettingsUpdate',
                 ]:
                     return
 
