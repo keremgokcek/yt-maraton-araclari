@@ -1,19 +1,6 @@
+import { Donation, DonationType } from "./common";
+
 const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-
-enum DonationType {
-    DONATION = "donation",
-    MEMBERSHIP = "membership",
-    MEMBERSHIP_GIFT = "membership_gift",
-    SUPERCHAT = "superchat",
-}
-
-interface Donation {
-    amount: number;
-    kind: DonationType;
-    donator: string;
-    message?: string;
-    channel_id?: string;
-}
 
 interface State {
     title: string;
