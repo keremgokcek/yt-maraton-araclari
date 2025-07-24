@@ -11,7 +11,7 @@
         <div id="container">
             <div id="title">{{ title }}</div>
             <div id="bar">
-                <div id="progress" style="width: {{ current / goal * 100 }}%"></div>
+                <div id="progress" style="width: {{ [(current / goal * 100), 100] | min }}%"></div>
                 <div id="percent">{{ current | round(2) }} TL ({{ (current / goal * 100) | round(2, 'floor') }}%)</div>
             </div>
             <div id="footer">
