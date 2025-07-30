@@ -31,6 +31,10 @@ class CustomApp(Quart):
         await self.streamlabs.shutdown()
         return await super().shutdown()
 
+    def update_config(self) -> None:
+        with open('config.json', 'w') as f:
+            dump(self.app_config, f, indent=4)
+
     def register_blueprint_folder(self, folder: str, **options) -> None:
         for file in listdir(folder):
             if file.endswith('.py'):

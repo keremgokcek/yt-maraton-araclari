@@ -1,7 +1,6 @@
 from socketio import AsyncClient
 from typing import TYPE_CHECKING
 from donation import Donation, DonationType
-from json import dump
 
 if TYPE_CHECKING:
     from app import CustomApp
@@ -34,8 +33,8 @@ class Streamlabs(AsyncClient):
         else:
             self.app.app_config['donate-goal']['current'] += data.amount * 0.65
 
-        with open('config.json', 'w') as f:
-            dump(self.app.app_config, f, indent=4)
+        # Save config
+        self.app.update_config()
 
         await self.app.connections.donate_goal.publish(data)
 
