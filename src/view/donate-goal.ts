@@ -1,4 +1,4 @@
-import { Donation, DonationType } from "./common";
+import { Donation, DonationType } from "../common";
 
 const protocol = window.location.protocol === "https:" ? "wss" : "ws";
 
