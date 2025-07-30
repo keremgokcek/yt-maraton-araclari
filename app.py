@@ -1,14 +1,11 @@
 from quart import Quart
 from streamlabs import Streamlabs
-from dotenv import load_dotenv
 from os import getenv, listdir
 from locale import setlocale, LC_TIME
 from json import load
 from types import SimpleNamespace
 from importlib import import_module
 from connection import ConnectionHandler
-
-load_dotenv()
 
 
 class CustomApp(Quart):
