@@ -40,6 +40,16 @@ class Streamlabs(AsyncClient):
         await self.app.connections.donate_goal.publish(data)
 
     async def event_handler(self, data) -> None:
+        # Skip unnecessary events
+        if data['type'] in [
+            'alertPlaying',
+            'follow',
+            'streamlabels',
+            'streamlabels.underlying',
+            'eventsPanelSettingsUpdate',
+        ]:
+            return
+
         match data['type']:
             case 'donation':  # Bynogame and Oyunfor donations
                 try:
@@ -160,15 +170,5 @@ class Streamlabs(AsyncClient):
                 await self._publish(donation)
 
             case _:
-                # Skip unnecessary events
-                if data['type'] in [
-                    'alertPlaying',
-                    'follow',
-                    'streamlabels',
-                    'streamlabels.underlying',
-                    'eventsPanelSettingsUpdate',
-                ]:
-                    return
-
                 # Any other event
                 print(f"TODO: Add support for {data['type']}")
