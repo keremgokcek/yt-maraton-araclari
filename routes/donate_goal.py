@@ -1,5 +1,5 @@
 from quart import Blueprint, current_app, render_template, websocket
-from donation import Donation, DonationType
+from donation import Donation
 
 donate_goal = Blueprint('donate_goal', __name__, template_folder='templates')
 
@@ -20,9 +20,6 @@ async def view_socket():
     await websocket.accept()
     async for data in current_app.connections.donate_goal.subscribe():
         if isinstance(data, Donation):
-            if data.kind != DonationType.DONATION:
-                data.amount *= 0.65
-
             await websocket.send_json(data.to_dict())
 
         else:

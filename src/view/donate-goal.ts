@@ -1,4 +1,4 @@
-import { Donation, DonationType } from "../common";
+import { Donation, DonationType, DEF_MULT, YT_MULT } from "../common";
 
 const protocol = window.location.protocol === "https:" ? "wss" : "ws";
 
@@ -56,7 +56,9 @@ window.onload = () => {
                     const data: Donation = JSON.parse(event.data);
                     console.log("Received donation:", data);
 
-                    state.current += data.amount;
+                    const multiplier = data.kind === DonationType.DONATION ? DEF_MULT : YT_MULT;
+
+                    state.current += data.amount * multiplier;
                     state.percent = (state.current / state.goal) * 100;
 
                     percent.textContent = `${parseFloat(state.current.toFixed(2))} TL (${parseFloat(state.percent.toFixed(2))}%)`;
