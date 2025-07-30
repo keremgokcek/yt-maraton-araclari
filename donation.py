@@ -7,6 +7,9 @@ class DonationType(Enum):
     MEMBERSHIP_GIFT = 'membership_gift'
     SUPERCHAT = 'superchat'
 
+    def __str__(self):
+        return self.value
+
 
 class Donation:
     def __init__(

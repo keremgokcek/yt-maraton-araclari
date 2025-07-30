@@ -2,10 +2,11 @@ from quart import Quart
 from streamlabs import Streamlabs
 from os import getenv, listdir
 from locale import setlocale, LC_TIME
-from json import load
+from json import load, dump
 from types import SimpleNamespace
 from importlib import import_module
 from connection import ConnectionHandler
+from datetime import datetime
 
 
 class CustomApp(Quart):
@@ -16,6 +17,10 @@ class CustomApp(Quart):
 
         self.connections = SimpleNamespace()
         self.connections.donate_goal = ConnectionHandler()
+        self.connections.countdown = ConnectionHandler()
+
+        self.managers = SimpleNamespace()
+        self.managers.countdown = ConnectionHandler()
 
         setlocale(LC_TIME, 'tr_TR.UTF-8')
 
@@ -31,6 +36,14 @@ class CustomApp(Quart):
     def update_config(self) -> None:
         with open('config.json', 'w') as f:
             dump(self.app_config, f, indent=4)
+
+    def log_event(self, data: dict) -> None:
+        data['timestamp'] = datetime.now().astimezone().isoformat()
+
+        logs = load(open('events.log'))
+        logs.append(data)
+        with open('events.log', 'w') as f:
+            dump(logs, f, indent=2, default=str)
 
     def register_blueprint_folder(self, folder: str, **options) -> None:
         for file in listdir(folder):

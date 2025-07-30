@@ -1,4 +1,4 @@
-import { Donation, DonationType, DEF_MULT, YT_MULT } from "../common";
+import { Donation, DonationType, DEF_MULT, YT_MULT } from "../common.js";
 
 const protocol = window.location.protocol === "https:" ? "wss" : "ws";
 

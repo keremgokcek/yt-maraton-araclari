@@ -1,11 +1,18 @@
 from socketio import AsyncClient
 from typing import TYPE_CHECKING
 from donation import Donation, DonationType
+from datetime import datetime, timedelta
 
 if TYPE_CHECKING:
     from app import CustomApp
 
 URL = "https://sockets.streamlabs.com?token={}"
+
+DEF_MULT = 1.0
+YT_MULT = 0.65
+
+DEF_TIME = 0.3
+YT_TIME = 0.15
 
 USD_TO_TRY = 39.83
 EUR_TO_TRY = 46.79
@@ -28,15 +35,22 @@ class Streamlabs(AsyncClient):
 
     async def _publish(self, data: Donation) -> None:
         # Donate Goal Update
-        if data.kind == DonationType.DONATION:
-            self.app.app_config['donate-goal']['current'] += data.amount
-        else:
-            self.app.app_config['donate-goal']['current'] += data.amount * 0.65
+        mult = DEF_TIME if data.kind == DonationType.DONATION else YT_MULT
+        self.app.app_config['donate-goal']['current'] += data.amount * mult
+
+        # Countdown Update
+        countdown_cfg = self.app.app_config['countdown']
+        end_date = datetime.fromisoformat(countdown_cfg['end-date'])
+        mult = DEF_TIME if data.kind == DonationType.DONATION else YT_TIME
+        added_time = timedelta(minutes=data.amount * mult)
+        countdown_cfg['end-date'] = (end_date + added_time).isoformat()
 
         # Save config
         self.app.update_config()
 
         await self.app.connections.donate_goal.publish(data)
+        await self.app.connections.countdown.publish(data)
+        await self.app.managers.countdown.publish(data)
 
     async def event_handler(self, data) -> None:
         # Skip unnecessary events
@@ -171,3 +185,20 @@ class Streamlabs(AsyncClient):
             case _:
                 # Any other event
                 print(f"TODO: Add support for {data['type']}")
+                return
+
+        # Log
+        self.app.log_event(
+            {
+                'type': 'add_time',
+                'username': 'Sistem',
+                'donator': donation.donator,
+                'donate_type': donation.kind,
+                'minutes': donation.amount
+                * (
+                    DEF_TIME
+                    if donation.kind == DonationType.DONATION
+                    else YT_TIME
+                ),
+            }
+        )

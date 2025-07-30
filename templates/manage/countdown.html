@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script>
+            var stopped = "{{ stopped }}" === "True";
+        </script>
+        <script type="module" src="/static/js/manage/countdown.js"></script>
+        <link rel="stylesheet" href="/static/css/manage/countdown.css" />
+        <title>Yönetim paneli</title>
+    </head>
+    <body>
+        <div class="user-profile">{{ username }} olarak giriş yapıldı.</div>
+        <div class="content">
+            <div class="control-box">
+                <div class="select-method">
+                    <div class="options" id="selection-options">
+                        <ul>
+                            <li class="selected">Zaman ekle</li>
+                            <li>Zaman çıkar</li>
+                            <li>Zaman ayarla</li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="input-box">
+                    <div id="add-time">
+                        <div class="textbox">
+                            <input id="minutes" type="number" name="minutes" placeholder="Dakika" title="" required />
+                        </div>
+                        <div class="textbox">
+                            <input id="name" type="text" name="name" placeholder="Bağışçı Adı" title="" required />
+                        </div>
+                        <a id="add-time-submit">Gönder</a>
+                    </div>
+                    <div id="remove-time" style="display: none">
+                        <div class="textbox">
+                            <input id="minutes" type="number" name="minutes" placeholder="Sil" title="" required />
+                        </div>
+                        <a onclick="submit" id="submit">Gönder</a>
+                    </div>
+                    <div id="adjust-time" style="display: none">
+                        <div class="textbox">
+                            <input id="date" type="datetime-local" name="date" placeholder="Ayarla" title="" value="2025-08-01T13:00" required />
+                        </div>
+                        <a id="set-time-submit">Gönder</a>
+                    </div>
+                </div>
+                <div id="timer-settings-box">
+                    <div class="indicator">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="" id="timer-settings">
+                        <a id="start-timer">Zamanı devam ettir</a>
+                        <a id="stop-timer">Zamanı durdur</a>
+                    </div>
+                </div>
+            </div>
+            <div class="log-box">
+                <div class="log-title">Değişiklik Kaydı</div>
+                <div class="log-body">
+                    {% for log in logs %}
+                    <div class="log-card" data-timestamp="{{ log.get('timestamp') }}">
+                        <div class="log-card-content">
+                            <div class="log-card-author">{{ log.get('author') }}</div>
+                            <div class="log-card-date" title="{{ log.get('full_date') }}">{{ log.get('date') }}</div>
+                        </div>
+                        <div class="log-card-message">{{ log.get('message') }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
