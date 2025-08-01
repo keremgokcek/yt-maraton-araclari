@@ -1,6 +1,6 @@
 from app import CustomApp
 from quart import jsonify
-from quart_auth import QuartAuth
+from quart_auth import QuartAuth, login_required
 from user import User
 from dotenv import load_dotenv
 from os import getenv
@@ -20,6 +20,17 @@ app.register_blueprint_folder('routes')
 async def restart_clients():
     await app.connections.donate_goal.publish('restart')
     return jsonify(True)
+
+
+@app.route('/api/clients')
+@login_required
+async def api_clients():
+    return {
+        'donate-goal': len(app.connections.donate_goal.connections),
+        'countdown': len(app.connections.countdown.connections),
+        'leaderboard': len(app.connections.leaderboard.connections),
+        'manage_countdown': len(app.managers.countdown.connections),
+    }
 
 
 if __name__ == '__main__':
