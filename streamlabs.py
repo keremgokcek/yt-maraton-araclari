@@ -78,7 +78,7 @@ class Streamlabs(AsyncClient):
                 'SELECT amount, minutes FROM leaderboard WHERE user_id = ?',
                 (data.channel_id,),
             )
-            user = cursor.fetchone()
+            user = await cursor.fetchone()
 
             if user:
                 await self.app.db_conn.execute(
