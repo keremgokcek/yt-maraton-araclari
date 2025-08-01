@@ -10,6 +10,11 @@ load_dotenv()
 app = CustomApp(__name__)
 app.secret_key = getenv('QUART_SECRET_KEY')
 
+auth_manager = QuartAuth(cookie_secure=False, user_class=User)
+auth_manager.init_app(app)
+
+app.register_blueprint_folder('routes')
+
 
 @app.route('/restart-clients')
 async def restart_clients():
@@ -18,9 +23,4 @@ async def restart_clients():
 
 
 if __name__ == '__main__':
-    auth_manager = QuartAuth(cookie_secure=False, user_class=User)
-    auth_manager.init_app(app)
-
-    app.register_blueprint_folder('routes')
-
     app.run(debug=True, use_reloader=True)
