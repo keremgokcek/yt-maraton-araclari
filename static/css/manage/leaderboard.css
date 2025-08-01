@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    height: 100%;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    font-family: 'Lexend', Arial, sans-serif;
+    background-color: #b8884e;
+}
+
+.user-profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    background-color: #690101;
+    color: white;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 104px);
+    background-color: gray;
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 32px;
+    box-sizing: border-box;
+    gap: 32px;
+    margin: 32px;
+    overflow: hidden;
+    position: relative;
+}
+
+.content > .donations {
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.content > .table {
+    width: 50%;
+    max-width: 600px;
+    padding: 0 16px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+}
+
+th, td {
+    padding: 0 12px;
+    border: 2px solid white;
+    text-wrap: nowrap;
+}
+
+tr {
+    height: 40px;
+    transition: height 0.2s;
+}
+
+th:nth-child(1), td:nth-child(1) {
+    width: 50%;
+    text-align: right;
+}
+
+th:nth-child(2), td:nth-child(2) {
+    width: 25%;
+    text-align: center;
+}
+
+th:nth-child(3), td:nth-child(3) {
+    width: 25%;
+    text-align: left;
+}
+
+th {
+    background-color: #33002F;
+}
+
+/* İlk 3 sponsor */
+tr:nth-child(1) > td {
+    background-color: #666600;
+}
+tr:nth-child(2) > td {
+    background-color: #166631;
+}
+tr:nth-child(3) > td {
+    background-color: #523314;
+}
+
+/* Diğer sütunlar */
+tr:nth-child(even) {
+    background-color: #2E4533;
+}
+tr:nth-child(odd) {
+    background-color: #283832;
+}
+
+.donation-card {
+    width: 100%;
+    background-color: aquamarine;
+    border-radius: 8px;
+    padding: 16px;
+    box-sizing: border-box;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: stretch;
+    text-wrap: nowrap;
+    margin-bottom: 12px;
+    user-select: none;
+}
+
+.donation-card.youtube {
+    background-color: rgb(255, 84, 84);
+}
+
+.donation-card > .amount-box {
+    width: 80px;
+    border: 1px solid black;
+    text-align: center;
+    border-radius: 4px;
+    background-color: white;
+    padding: 4px 8px;
+    height: fit-content;
+}
+
+.vertical-box {
+    width: 100%;
+    /* background-color: red; */
+}
+
+.donation-card .header {
+    font-size: 12px;
+    height: 20px;
+}
+
+.donation-card.dragging {
+    z-index: 2;
+}
+
+.new-entry-area {
+    z-index: 1;
+    height: 100px;
+    width: 800px;
+    color: white;
+    background-color: #4C585B;
+    position: absolute;
+    outline: 2px dashed white;
+    outline-offset: -8px;
+    border-radius: 12px;
+    top: 80px;
+    right: -800px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: right 0.2s ease-out, box-shadow 0.2s linear;
+    box-sizing: border-box;
+}
+
+.new-entry-area:hover {
+    box-shadow: 0 0 12px 3px lime;
+}

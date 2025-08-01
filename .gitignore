@@ -4,3 +4,4 @@ env
 static/js
 *.log
 logins.json
+*.db

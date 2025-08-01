@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script type="module" src="/static/js/manage/leaderboard.js"></script>
+        <link rel="stylesheet" href="/static/css/manage/leaderboard.css" />
+        <title>Maraton Tablosu | Moderasyon</title>
+    </head>
+    <body>
+        <div class="user-profile">{{ username }} olarak giriş yapıldı.</div>
+        <div class="content">
+            <div class="table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sponsor</th>
+                            <th>Miktar</th>
+                            <th>Süre</th>
+                        </tr>
+                    </thead>
+                    {% for user in users %}
+                    <tr data-id="{{ user[0] }}">
+                        <td>{{ user[1] }}</td>
+                        <td>{{ user[2] | int }} TL</td>
+                        <td>{{ user[3] | round(2, 'floor') }} Dk</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="donations">
+                <div class="new-entry-area">Yeni tablo girdisi olusturmak icin buraya surukle!</div>
+                {% for donation in donations %} {% if donation[4] == 'donation' %} {% set donation_class = "donation" %} {% else %} {% set donation_class = "youtube" %} {% endif %}
+                <div class="donation-card {{ donation_class }}" data-id="{{ donation[0] }}">
+                    <div class="amount-box">
+                        {{ donation[2] | int }} TL
+                        <br />
+                        {{ donation[3] | round(2, 'floor') }} Dk
+                    </div>
+                    <div class="vertical-box">
+                        <div class="header">{{ donation[1] }}</div>
+                        <div class="message">{{ donation[5] }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </body>
+</html>

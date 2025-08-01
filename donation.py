@@ -17,8 +17,8 @@ class Donation:
         amount: int,
         kind: DonationType,
         donator: str,
-        message: str = None,
-        channel_id: str = None,
+        message: str = '',
+        channel_id: str = '',
     ) -> None:
         self.amount = amount
         self.kind = kind

@@ -45,11 +45,68 @@ class Streamlabs(AsyncClient):
         added_time = timedelta(minutes=data.amount * mult)
         countdown_cfg['end-date'] = (end_date + added_time).isoformat()
 
+        # Leaderboard Update
+        if data.kind == DonationType.DONATION:
+            cursor = await self.app.db_conn.execute(
+                'SELECT amount, minutes FROM leaderboard WHERE username = ?',
+                (data.donator,),
+            )
+            user = await cursor.fetchone()
+
+            if user:
+                await self.app.db_conn.execute(
+                    'UPDATE leaderboard SET amount = ?, minutes = ? WHERE username = ?',
+                    (
+                        user[0] + data.amount,
+                        user[1] + data.amount * DEF_TIME,
+                        data.donator,
+                    ),
+                )
+            else:
+                await self.app.db_conn.execute(
+                    'INSERT INTO waiting_donations (username, amount, minutes, source, message) VALUES (?, ?, ?, ?, ?)',
+                    (
+                        data.donator,
+                        data.amount,
+                        data.amount * DEF_TIME,
+                        data.kind.value,
+                        data.message,
+                    ),
+                )
+        else:
+            cursor = await self.app.db_conn.execute(
+                'SELECT amount, minutes FROM leaderboard WHERE user_id = ?',
+                (data.channel_id,),
+            )
+            user = cursor.fetchone()
+
+            if user:
+                await self.app.db_conn.execute(
+                    'UPDATE leaderboard SET amount = ?, minutes = ? WHERE user_id = ?',
+                    (
+                        user[0] + data.amount,
+                        user[1] + data.amount * YT_TIME,
+                        data.channel_id,
+                    ),
+                )
+            else:
+                await self.app.db_conn.execute(
+                    'INSERT INTO leaderboard (user_id, username, amount, minutes) VALUES (?, ?, ?, ?)',
+                    (
+                        data.channel_id,
+                        data.donator,
+                        data.amount,
+                        data.amount * YT_TIME,
+                    ),
+                )
+
         # Save config
         self.app.update_config()
+        await self.app.db_conn.commit()
 
         await self.app.connections.donate_goal.publish(data)
         await self.app.connections.countdown.publish(data)
+        await self.app.connections.leaderboard.publish(data)
         await self.app.managers.countdown.publish(data)
 
     async def event_handler(self, data) -> None:

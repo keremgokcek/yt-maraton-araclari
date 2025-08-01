@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+
+html {
+    height: 80%;
+    color: white;
+}
+
+html, body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: black; */
+    font-family: 'Lexend', Arial, sans-serif;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 4px 8px;
+    border: 2px solid white;
+    height: 30px;
+}
+
+th:nth-child(1), td:nth-child(1) {
+    min-width: 160px;
+    text-align: right;
+}
+
+th:nth-child(2), td:nth-child(2) {
+    min-width: 80px;
+    text-align: center;
+}
+
+th:nth-child(3), td:nth-child(3) {
+    min-width: 80px;
+    text-align: left;
+}
+
+th {
+    background-color: #33002F;
+}
+
+/* İlk 3 sponsor */
+tr:nth-child(1) > td {
+    background-color: #666600;
+}
+tr:nth-child(2) > td {
+    background-color: #166631;
+}
+tr:nth-child(3) > td {
+    background-color: #523314;
+}
+
+/* Diğer sütunlar */
+tr:nth-child(even) {
+    background-color: #2E4533;
+}
+tr:nth-child(odd) {
+    background-color: #283832;
+}

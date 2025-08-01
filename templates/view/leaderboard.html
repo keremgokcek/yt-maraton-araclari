@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script type="module" src="/static/js/view/leaderboard.js"></script>
+        <link rel="stylesheet" href="/static/css/view/leaderboard.css" />
+        <title>Maraton Tablosu</title>
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th>Sponsor</th>
+                    <th>Miktar</th>
+                    <th>Süre</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user[0] }}</td>
+                    <td>{{ user[1] | int }} TL</td>
+                    <td>{{ user[2] | int }} Dk</td>
+                </tr>
+                {% endfor %} {% for n in range(10 - users | length) %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </body>
+</html>

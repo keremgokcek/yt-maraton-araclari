@@ -1,12 +1,17 @@
 from quart import Quart
 from streamlabs import Streamlabs
-from os import getenv, listdir
+from os import getenv, listdir, path
 from locale import setlocale, LC_TIME
 from json import load, dump
 from types import SimpleNamespace
 from importlib import import_module
 from connection import ConnectionHandler
 from datetime import datetime
+from aiosqlite import connect
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from aiosqlite import Connection
 
 
 class CustomApp(Quart):
@@ -18,6 +23,7 @@ class CustomApp(Quart):
         self.connections = SimpleNamespace()
         self.connections.donate_goal = ConnectionHandler()
         self.connections.countdown = ConnectionHandler()
+        self.connections.leaderboard = ConnectionHandler()
 
         self.managers = SimpleNamespace()
         self.managers.countdown = ConnectionHandler()
@@ -25,12 +31,14 @@ class CustomApp(Quart):
         setlocale(LC_TIME, 'tr_TR.UTF-8')
 
     async def startup(self) -> None:
+        self.db_conn = await self.setup_database_connection()
         await self.streamlabs.connect()
         return await super().startup()
 
     async def shutdown(self):
         print('Shutting down Quart server...')
         await self.streamlabs.shutdown()
+        await self.db_conn.close()
         return await super().shutdown()
 
     def update_config(self) -> None:
@@ -51,3 +59,39 @@ class CustomApp(Quart):
                 module = import_module(f'{folder}.{file[:-3]}')
                 blueprint = getattr(module, file[:-3])
                 blueprint.register(self, options)
+
+    async def setup_database_connection(
+        self, database_file="maraton.db"
+    ) -> "Connection":
+        if path.isdir(database_file) or not path.exists(database_file):
+            # Database setup here
+            conn = await connect(database_file)
+            await conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS leaderboard (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id TEXT UNIQUE,
+                    username TEXT,
+                    amount REAL,
+                    minutes REAL
+                )
+                """
+            )
+            await conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS waiting_donations (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    username TEXT,
+                    amount REAL,
+                    minutes REAL,
+                    source TEXT,
+                    message TEXT
+                )
+                """
+            )
+
+            await conn.commit()
+        else:
+            conn = await connect(database_file)
+
+        return conn
