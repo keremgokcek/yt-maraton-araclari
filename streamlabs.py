@@ -75,8 +75,8 @@ class Streamlabs(AsyncClient):
                 )
         else:
             cursor = await self.app.db_conn.execute(
-                'SELECT amount, minutes FROM leaderboard WHERE user_id = ?',
-                (data.channel_id,),
+                'SELECT amount, minutes FROM leaderboard WHERE user_id = ? OR username = ?',
+                (data.channel_id, data.donator),
             )
             user = await cursor.fetchone()
 
