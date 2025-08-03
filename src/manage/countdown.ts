@@ -27,12 +27,12 @@ function connectWebsocket() {
 
     ws.addEventListener('error', (event) => {
         console.error('WebSocket error observed:', event);
-        clearInterval(interval);
         ws.close();
     });
 
     ws.addEventListener('close', () => {
         console.log('WebSocket connection closed');
+        clearInterval(interval);
         setTimeout(() => {
             connectWebsocket();
         }, 3000);
@@ -40,7 +40,7 @@ function connectWebsocket() {
 
     ws.addEventListener('message', (event) => {
         console.log('Message from server:', event.data);
-        if (event.data === 'ping') return;
+        if (event.data === 'pong') return;
         const data: Log = JSON.parse(event.data);
         const logCard = createLogCard(data.message, data.username, data.timestamp);
         log_body.insertBefore(logCard, log_body.firstChild);

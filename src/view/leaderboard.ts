@@ -16,7 +16,7 @@ window.onload = () => {
         ws.addEventListener('open', () => {
             console.log('Connected to WebSocket server');
             interval = setInterval(() => {
-                ws.send(JSON.stringify({ type: 'ping' }));
+                ws.send('ping');
             }, 60000);
         });
 
@@ -27,14 +27,17 @@ window.onload = () => {
 
         ws.addEventListener('close', () => {
             console.log('WebSocket connection closed');
+            clearInterval(interval);
             setTimeout(() => {
                 connectWebsocket();
             }, 3000);
         });
 
         ws.addEventListener('message', (event) => {
-            if (event.data === 'ping') return;
+            console.log(`Message from server: ${event.data}`);
+            if (event.data === 'pong') return;
             if (event.data === 'restart') window.location.reload();
+
             const data: string[][] = JSON.parse(event.data);
 
             tbody.innerHTML = '';

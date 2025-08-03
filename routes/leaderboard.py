@@ -1,6 +1,8 @@
 from quart import Blueprint, current_app, render_template, websocket
 from quart_auth import login_required, current_user
 from json import loads
+from utils import reply_pings
+from asyncio import gather
 
 leaderboard = Blueprint('leaderboard', __name__, template_folder='templates')
 
@@ -15,20 +17,23 @@ async def view():
 
 @leaderboard.websocket('/view/leaderboard')
 async def view_socket():
-    users = await current_app.db_conn.execute_fetchall(
-        "SELECT username, amount, minutes FROM leaderboard ORDER BY minutes DESC LIMIT 10"
-    )
-    await websocket.send_json(users)
-
-    async for data in current_app.connections.leaderboard.subscribe():
-        if data == 'restart':
-            await websocket.send('restart')
-            continue
-
+    async def sender() -> None:
         users = await current_app.db_conn.execute_fetchall(
             "SELECT username, amount, minutes FROM leaderboard ORDER BY minutes DESC LIMIT 10"
         )
         await websocket.send_json(users)
+
+        async for data in current_app.connections.leaderboard.subscribe():
+            if data == 'restart':
+                await websocket.send('restart')
+                continue
+
+            users = await current_app.db_conn.execute_fetchall(
+                "SELECT username, amount, minutes FROM leaderboard ORDER BY minutes DESC LIMIT 10"
+            )
+            await websocket.send_json(users)
+
+    await gather(sender(), reply_pings())
 
 
 @leaderboard.route('/manage/leaderboard')
@@ -55,10 +60,13 @@ async def manage_socket():
     await websocket.accept()
 
     while True:
-        data = loads(await websocket.receive())
+        message = await websocket.receive()
 
-        if data['type'] == 'ping':
+        if message == 'ping':
+            await websocket.send('pong')
             continue
+
+        data = loads(message)
 
         if data['type'] == 'update':
             cursor = await current_app.db_conn.execute(

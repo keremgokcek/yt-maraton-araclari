@@ -1,5 +1,7 @@
 from quart import Blueprint, current_app, render_template, websocket
 from donation import Donation
+from utils import reply_pings
+from asyncio import gather
 
 donate_goal = Blueprint('donate_goal', __name__, template_folder='templates')
 
@@ -18,9 +20,13 @@ async def view():
 @donate_goal.websocket('/view/donate-goal')
 async def view_socket():
     await websocket.accept()
-    async for data in current_app.connections.donate_goal.subscribe():
-        if isinstance(data, Donation):
-            await websocket.send_json(data.to_dict())
 
-        else:
-            await websocket.send(data)
+    async def sender() -> None:
+        async for data in current_app.connections.donate_goal.subscribe():
+            if isinstance(data, Donation):
+                await websocket.send_json(data.to_dict())
+
+            else:
+                await websocket.send(data)
+
+    await gather(sender(), reply_pings())

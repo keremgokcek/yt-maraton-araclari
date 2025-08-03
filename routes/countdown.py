@@ -4,6 +4,7 @@ from quart_auth import login_required, current_user
 from types import SimpleNamespace
 from json import loads, load
 from donation import Donation, DonationType
+from utils import reply_pings
 from enum import Enum
 from asyncio import gather
 
@@ -83,16 +84,19 @@ async def view():
 async def view_socket():
     await websocket.send(f'countdown {int(get_date().timestamp()*1000)}')
 
-    async for data in current_app.connections.countdown.subscribe():
-        if isinstance(data, Donation):
-            await websocket.send_json(
-                {
-                    'type': 'add_donation',
-                    'donation': data.to_dict(),
-                }
-            )
-        else:
-            await websocket.send(data)
+    async def sender() -> None:
+        async for data in current_app.connections.countdown.subscribe():
+            if isinstance(data, Donation):
+                await websocket.send_json(
+                    {
+                        'type': 'add_donation',
+                        'donation': data.to_dict(),
+                    }
+                )
+            else:
+                await websocket.send(data)
+
+    await gather(sender(), reply_pings())
 
 
 @countdown.route('/manage/countdown')
@@ -168,6 +172,7 @@ async def manage_socket():
         while True:
             message = await websocket.receive()
             if message == "ping":
+                await websocket.send('pong')
                 continue
 
             now = datetime.now()

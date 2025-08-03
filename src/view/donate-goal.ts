@@ -36,11 +36,11 @@ window.onload = () => {
         ws.addEventListener("error", (event: Event) => {
             console.error("WebSocket error observed:", event);
             ws.close();
-            window.clearInterval(interval);
         });
 
         ws.addEventListener("close", () => {
             console.log("WebSocket connection closed");
+            window.clearInterval(interval);
             setTimeout(() => {
                 connectWebsocket();
             }, 3000);
@@ -51,6 +51,8 @@ window.onload = () => {
 
             if (event.data === "restart") {
                 window.location.reload();
+            } else if (event.data === 'pong') {
+                // Do nothing
             } else {
                 try {
                     const data: Donation = JSON.parse(event.data);

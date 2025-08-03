@@ -124,7 +124,7 @@ function connectWebsocket() {
     ws.addEventListener('open', () => {
         console.log('Connected to WebSocket server');
         interval = setInterval(() => {
-            ws.send(JSON.stringify({ type: 'ping' }));
+            ws.send('ping');
         }, 60000);
     });
 
@@ -135,6 +135,7 @@ function connectWebsocket() {
 
     ws.addEventListener('close', () => {
         console.log('WebSocket connection closed');
+        clearInterval(interval);
         setTimeout(() => {
             connectWebsocket();
         }, 3000);
@@ -142,6 +143,6 @@ function connectWebsocket() {
 
     ws.addEventListener('message', (event) => {
         console.log('Message from server:', event.data);
-        if (event.data === 'ping') return;
+        if (event.data === 'pong') return;
     })
 }

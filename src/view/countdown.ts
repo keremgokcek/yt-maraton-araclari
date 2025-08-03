@@ -48,30 +48,30 @@ window.onload = () => {
     function connectWebsocket() {
         const ws = new WebSocket(`${protocol}://${window.location.host}/view/countdown`);
         var interval: number;
-        
+
         ws.addEventListener('open', () => {
             console.log('Connected to WebSocket server');
             interval = setInterval(() => {
                 ws.send('ping');
             }, 60000);
         });
-        
+
         ws.addEventListener('error', (event) => {
             console.error('WebSocket error observed:', event);
             ws.close();
-            clearInterval(interval);
         });
-        
+
         ws.addEventListener('close', () => {
             console.log('WebSocket connection closed');
+            clearInterval(interval);
             setTimeout(() => {
                 connectWebsocket();
             }, 3000);
         });
-        
+
         ws.addEventListener('message', async (event) => {
             console.log('Message from server:', event.data);
-        
+
             if (event.data.startsWith('countdown')) {
                 timer.setNewTime(parseInt(event.data.split(' ')[1]));
             } else if (event.data == 'stop') {
@@ -80,7 +80,7 @@ window.onload = () => {
                 timer.continueCountdown();
             } else if (event.data == 'restart') {
                 window.location.reload()
-            } else if (event.data == 'ping') {
+            } else if (event.data == 'pong') {
                 // Do nothing
             } else {
                 const data: Command = JSON.parse(event.data);
