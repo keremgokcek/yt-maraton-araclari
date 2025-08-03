@@ -99,6 +99,8 @@ async def manage_socket():
                 'INSERT INTO leaderboard (username, amount, minutes) VALUES (?, ?, ?)',
                 (username, amount, minutes),
             )
+        else:
+            continue
 
         await current_app.db_conn.execute(
             'DELETE FROM waiting_donations WHERE id = ?', (data['source'],)
