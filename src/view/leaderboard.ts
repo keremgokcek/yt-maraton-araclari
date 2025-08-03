@@ -17,7 +17,7 @@ window.onload = () => {
             console.log('Connected to WebSocket server');
             interval = setInterval(() => {
                 ws.send('ping');
-            }, 60000);
+            }, 30000);
         });
 
         ws.addEventListener('error', (event) => {
