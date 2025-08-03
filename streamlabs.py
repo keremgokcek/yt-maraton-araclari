@@ -35,7 +35,7 @@ class Streamlabs(AsyncClient):
 
     async def _publish(self, data: Donation) -> None:
         # Donate Goal Update
-        mult = DEF_TIME if data.kind == DonationType.DONATION else YT_MULT
+        mult = DEF_MULT if data.kind == DonationType.DONATION else YT_MULT
         self.app.app_config['donate-goal']['current'] += data.amount * mult
 
         # Countdown Update
