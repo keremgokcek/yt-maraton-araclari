@@ -20,7 +20,11 @@ async def view_socket():
     )
     await websocket.send_json(users)
 
-    async for _ in current_app.connections.leaderboard.subscribe():
+    async for data in current_app.connections.leaderboard.subscribe():
+        if data == 'restart':
+            await websocket.send('restart')
+            continue
+
         users = await current_app.db_conn.execute_fetchall(
             "SELECT username, amount, minutes FROM leaderboard ORDER BY minutes DESC LIMIT 10"
         )
