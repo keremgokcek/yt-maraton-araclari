@@ -9,11 +9,21 @@ load_dotenv()
 
 app = CustomApp(__name__)
 app.secret_key = getenv('QUART_SECRET_KEY')
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 auth_manager = QuartAuth(cookie_secure=False, user_class=User)
 auth_manager.init_app(app)
 
 app.register_blueprint_folder('routes')
+
+
+@app.after_request
+def add_header(response):
+    response.cache_control.no_cache = True
+    response.cache_control.no_store = True
+    response.cache_control.max_age = 0
+    response.cache_control.must_revalidate = True
+    return response
 
 
 @app.route('/restart-clients')
