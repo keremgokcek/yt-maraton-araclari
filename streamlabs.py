@@ -75,18 +75,19 @@ class Streamlabs(AsyncClient):
                 )
         else:
             cursor = await self.app.db_conn.execute(
-                'SELECT amount, minutes FROM leaderboard WHERE user_id = ? OR username = ?',
-                (data.channel_id, data.donator),
+                'SELECT id FROM leaderboard WHERE user_id = ? OR username = ? ORDER BY (user_id = ?) DESC',
+                (data.channel_id, data.donator, data.channel_id),
             )
             user = await cursor.fetchone()
 
             if user:
                 await self.app.db_conn.execute(
-                    'UPDATE leaderboard SET amount = ?, minutes = ? WHERE user_id = ?',
+                    'UPDATE leaderboard SET amount = amount + ?, minutes = minutes + ?, user_id = ? WHERE id = ?',
                     (
-                        user[0] + data.amount,
-                        user[1] + data.amount * YT_TIME,
+                        data.amount,
+                        data.amount * YT_TIME,
                         data.channel_id,
+                        user[0],
                     ),
                 )
             else:
