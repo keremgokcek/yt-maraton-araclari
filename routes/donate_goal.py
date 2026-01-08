@@ -19,14 +19,29 @@ async def view():
 
 @donate_goal.websocket('/view/donate-goal')
 async def view_socket():
-    await websocket.accept()
+    donate_goal_cfg = current_app.app_config['donate-goal']
+
+    await websocket.send_json(
+        {
+            'type': 'set_state',
+            'state': {
+                'title': donate_goal_cfg['title'],
+                'goal': donate_goal_cfg['goal'],
+                'current': donate_goal_cfg['current'],
+            },
+        }
+    )
 
     async def sender() -> None:
         async for data in current_app.connections.donate_goal.subscribe():
             if isinstance(data, Donation):
-                await websocket.send_json(data.to_dict())
-
+                await websocket.send_json(
+                    {
+                        'type': 'add_donation',
+                        'donation': data.to_dict(),
+                    }
+                )
             else:
-                await websocket.send(data)
+                await websocket.send_json(data)
 
     await gather(sender(), reply_pings())

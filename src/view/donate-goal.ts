@@ -2,23 +2,49 @@ import { Donation, DonationType, DEF_MULT, YT_MULT } from "../common.js";
 
 const protocol = window.location.protocol === "https:" ? "wss" : "ws";
 
+enum CommandType {
+    SET_STATE = "set_state",
+    ADD_DONATION = "add_donation",
+    RESTART = "restart",
+}
+
+interface BaseCommand {
+    type: CommandType;
+}
+
+interface SetStateCommand {
+    type: CommandType.SET_STATE;
+    state: State;
+}
+
+interface AddDonationCommand extends BaseCommand {
+    type: CommandType.ADD_DONATION;
+    donation: Donation;
+}
+
+interface RestartCommand extends BaseCommand {
+    type: CommandType.RESTART;
+}
+
+type Command = SetStateCommand | AddDonationCommand | RestartCommand;
+
 interface State {
     title: string;
     goal: number;
-    percent: number;
     current: number;
 }
 
 let state: State;
 
 window.onload = () => {
+    const goal = document.getElementById("goal")!;
     const percent = document.getElementById("percent")!;
     const progress = document.getElementById("progress")!;
+    const title = document.getElementById("title")!;
 
     state = {
         title: document.getElementById("title")?.textContent!,
         goal: parseInt(document.getElementById("goal")?.textContent?.split(" ")[0]!),
-        percent: parseFloat(document.getElementById("percent")?.textContent?.match(/\(([0-9.]*)%\)/)?.[1]!),
         current: parseFloat(document.getElementById("percent")?.textContent?.match(/^([0-9.]*) TL/)?.[1]!),
     };
 
@@ -49,22 +75,23 @@ window.onload = () => {
         ws.addEventListener("message", async (event: MessageEvent) => {
             console.log("Message from server:", event.data);
 
-            if (event.data === "restart") {
-                window.location.reload();
-            } else if (event.data === 'pong') {
+            if (event.data === 'pong') {
                 // Do nothing
             } else {
-                try {
-                    const data: Donation = JSON.parse(event.data);
+                const command: Command = JSON.parse(event.data);
+
+                if (command.type == CommandType.ADD_DONATION) {
+                    let data = command.donation;
+
                     console.log("Received donation:", data);
 
                     const multiplier = data.kind === DonationType.DONATION ? DEF_MULT : YT_MULT;
 
                     state.current += data.amount * multiplier;
-                    state.percent = (state.current / state.goal) * 100;
+                    let current_percent = (state.current / state.goal) * 100;
 
-                    percent.textContent = `${parseFloat(state.current.toFixed(2))} TL (${parseFloat(state.percent.toFixed(2))}%)`;
-                    progress.style.width = `${Math.min(state.percent, 100)}%`;
+                    percent.textContent = `${parseFloat(state.current.toFixed(2))} TL (${parseFloat(current_percent.toFixed(2))}%)`;
+                    progress.style.width = `${Math.min(current_percent, 100)}%`;
 
                     if (data.kind === DonationType.DONATION) {
                         console.log(`Donation of ${data.amount} TRY`);
@@ -77,8 +104,17 @@ window.onload = () => {
                     } else {
                         console.log(`Unsupported donation type: ${data.kind}`);
                     }
-                } catch (err) {
-                    console.error("Failed to parse donation:", err);
+                } else if (command.type == CommandType.SET_STATE) {
+                    state = command.state;
+
+                    goal.textContent = `${state.goal} TL`
+                    title.textContent = `${state.title}`
+
+                    let current_percent = (state.current / state.goal) * 100;
+                    percent.textContent = `${parseFloat(state.current.toFixed(2))} TL (${parseFloat(current_percent.toFixed(2))}%)`;
+                    progress.style.width = `${Math.min(current_percent, 100)}%`;
+                } else if (command.type == CommandType.RESTART) {
+                    window.location.reload();
                 }
             }
         });

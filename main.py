@@ -28,7 +28,7 @@ def add_header(response):
 
 @app.route('/restart-clients')
 async def restart_clients():
-    await app.connections.donate_goal.publish('restart')
+    await app.connections.donate_goal.publish({'type': 'restart'})
     await app.connections.countdown.publish('restart')
     await app.connections.leaderboard.publish('restart')
     return jsonify(True)
