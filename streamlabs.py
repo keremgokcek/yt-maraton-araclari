@@ -2,6 +2,7 @@ from socketio import AsyncClient
 from typing import TYPE_CHECKING
 from donation import Donation, DonationType
 from datetime import datetime, timedelta
+from youtube import get_display_name
 
 if TYPE_CHECKING:
     from app import CustomApp
@@ -159,9 +160,12 @@ class Streamlabs(AsyncClient):
                     )
                     return
 
-                donator = data['message'][0]['name']
                 message = data['message'][0].get('comment')
                 channel_id = data['message'][0]['channelId']
+                donator = (
+                    await get_display_name(channel_id)
+                    or data['message'][0]['name']
+                )
 
                 donation = Donation(
                     amount,
@@ -210,8 +214,11 @@ class Streamlabs(AsyncClient):
                             )
                             return
 
-                    donator = data['message'][0]['name']
                     channel_id = data['message'][0]['id']
+                    donator = (
+                        await get_display_name(channel_id)
+                        or data['message'][0]['name']
+                    )
 
                     donation = Donation(
                         amount,
@@ -228,8 +235,11 @@ class Streamlabs(AsyncClient):
                     return  # Membership gift redemption announce
 
                 amount = data['message'][0]['giftMembershipsCount'] * 10
-                donator = data['message'][0]['name']
                 channel_id = data['message'][0]['id']
+                donator = (
+                    await get_display_name(channel_id)
+                    or data['message'][0]['name']
+                )
 
                 donation = Donation(
                     amount,
