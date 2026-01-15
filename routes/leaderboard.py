@@ -3,6 +3,7 @@ from quart_auth import login_required, current_user
 from json import loads
 from utils import reply_pings
 from asyncio import gather
+from math import floor
 
 leaderboard = Blueprint('leaderboard', __name__, template_folder='templates')
 
@@ -21,17 +22,40 @@ async def view_socket():
         users = await current_app.db_conn.execute_fetchall(
             "SELECT username, amount, minutes FROM leaderboard ORDER BY minutes DESC LIMIT 10"
         )
-        await websocket.send_json(users)
+        await websocket.send_json(
+            {
+                'type': 'set_state',
+                'state': [
+                    {
+                        'name': user[0],
+                        'amount': floor(user[1]),
+                        'minutes': floor(user[2]),
+                    }
+                    for user in users
+                ],
+            }
+        )
 
         async for data in current_app.connections.leaderboard.subscribe():
-            if data == 'restart':
-                await websocket.send('restart')
-                continue
-
-            users = await current_app.db_conn.execute_fetchall(
-                "SELECT username, amount, minutes FROM leaderboard ORDER BY minutes DESC LIMIT 10"
-            )
-            await websocket.send_json(users)
+            if isinstance(data, dict) and data.get('type') == 'restart':
+                await websocket.send_json(data)
+            else:
+                users = await current_app.db_conn.execute_fetchall(
+                    "SELECT username, amount, minutes FROM leaderboard ORDER BY minutes DESC LIMIT 10"
+                )
+                await websocket.send_json(
+                    {
+                        'type': 'set_state',
+                        'state': [
+                            {
+                                'name': user[0],
+                                'amount': floor(user[1]),
+                                'minutes': floor(user[2]),
+                            }
+                            for user in users
+                        ],
+                    }
+                )
 
     await gather(sender(), reply_pings())
 

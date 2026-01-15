@@ -14,13 +14,24 @@ html, body {
 }
 
 table {
-    border-collapse: collapse;
+    border-collapse: separate;
+    position: relative;
+    border-spacing: 0;
 }
 
 th, td {
     padding: 4px 8px;
-    border: 2px solid white;
+    border-top: 2px solid white;
+    border-left: 2px solid white;
     height: 30px;
+}
+
+th:last-child, td:last-child {
+    border-right: 2px solid white;
+}
+
+tr:nth-child(10) td {
+    border-bottom: 2px solid white;
 }
 
 th:nth-child(1), td:nth-child(1) {
@@ -42,21 +53,35 @@ th {
     background-color: #33002F;
 }
 
-/* İlk 3 sponsor */
-tr:nth-child(1) > td {
-    background-color: #666600;
-}
-tr:nth-child(2) > td {
-    background-color: #166631;
-}
-tr:nth-child(3) > td {
-    background-color: #523314;
-}
-
 /* Diğer sütunlar */
 tr:nth-child(even) {
     background-color: #2E4533;
 }
 tr:nth-child(odd) {
     background-color: #283832;
+}
+
+/* İlk 3 sponsor */
+tr:nth-child(1) {
+    background-color: #666600;
+}
+tr:nth-child(2) {
+    background-color: #166631;
+}
+tr:nth-child(3) {
+    background-color: #523314;
+}
+
+/* Animasyon */
+tr {
+    transition: top 1s ease-in-out, background-color 1s, opacity 1s, scale 1s ease-in-out;
+    left: 0;
+}
+tr.floating {
+    border: 1px solid white;
+    color: white;
+    position: absolute;
+}
+tr.floating td {
+    border: 1px solid white;
 }
