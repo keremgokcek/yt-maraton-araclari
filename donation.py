@@ -6,6 +6,7 @@ class DonationType(Enum):
     MEMBERSHIP = 'membership'
     MEMBERSHIP_GIFT = 'membership_gift'
     SUPERCHAT = 'superchat'
+    SUPERSTICKER = 'supersticker'
 
     def __str__(self):
         return self.value

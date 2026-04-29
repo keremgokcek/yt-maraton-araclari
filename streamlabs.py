@@ -250,6 +250,35 @@ class Streamlabs(AsyncClient):
 
                 await self._publish(donation)
 
+            case 'superSticker':
+                raw_amount = int(data['message'][0]['amount']) / 1000000
+                if data['message'][0]['currency'] == 'TRY':
+                    amount = raw_amount
+                elif data['message'][0]['currency'] == 'USD':
+                    amount = raw_amount * USD_TO_TRY
+                elif data['message'][0]['currency'] == 'EUR':
+                    amount = raw_amount * EUR_TO_TRY
+                else:
+                    print(
+                        f"WARNING: Currency {data['message'][0]['currency']} is not supported!"
+                    )
+                    return
+
+                channel_id = data['message'][0]['channelId']
+                donator = (
+                    await get_display_name(channel_id)
+                    or data['message'][0]['name']
+                )
+
+                donation = Donation(
+                    amount,
+                    DonationType.SUPERSTICKER,
+                    donator,
+                    channel_id,
+                )
+
+                await self._publish(donation)
+
             case _:
                 # Any other event
                 print(f"TODO: Add support for {data['type']}")
