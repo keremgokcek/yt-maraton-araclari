@@ -199,15 +199,15 @@ class Streamlabs(AsyncClient):
                 else:  # New membership event
                     match data['message'][0]['membershipLevelName']:
                         case 'Destekçi':
-                            amount = 10
-                        case 'Sağlam Destekçi':
                             amount = 25
-                        case 'Kral Destekçi':
+                        case 'Sağlam Destekçi':
                             amount = 50
-                        case 'Kanalın Sahibi':
+                        case 'Kral Destekçi':
                             amount = 100
+                        case 'Kanalın Sahibi':
+                            amount = 250
                         case 'Büyük Sponsor ':
-                            amount = 650
+                            amount = 2500
                         case _:
                             print(
                                 f"DEBUG: {data['message'][0]['membershipLevelName']} unsupported"
@@ -234,7 +234,7 @@ class Streamlabs(AsyncClient):
                     print('DEBUG: Skipping membership gift redemption message')
                     return  # Membership gift redemption announce
 
-                amount = data['message'][0]['giftMembershipsCount'] * 10
+                amount = data['message'][0]['giftMembershipsCount'] * 25
                 channel_id = data['message'][0]['id']
                 donator = (
                     await get_display_name(channel_id)
