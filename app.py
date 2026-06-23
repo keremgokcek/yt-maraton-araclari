@@ -23,6 +23,7 @@ class CustomApp(Quart):
 
         self.connections = SimpleNamespace()
         self.connections.donate_goal = ConnectionHandler()
+        self.connections.membership_goal = ConnectionHandler()
         self.connections.countdown = ConnectionHandler()
         self.connections.leaderboard = ConnectionHandler()
 

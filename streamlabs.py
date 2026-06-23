@@ -39,6 +39,9 @@ class Streamlabs(AsyncClient):
         mult = DEF_MULT if data.kind == DonationType.DONATION else YT_MULT
         self.app.app_config['donate-goal']['current'] += data.amount * mult
 
+        # Membership Goal Update
+        self.app.app_config['membership-goal']['current'] += data.amount / 25
+
         # Countdown Update
         countdown_cfg = self.app.app_config['countdown']
         end_date = datetime.fromisoformat(countdown_cfg['end-date'])
@@ -107,6 +110,7 @@ class Streamlabs(AsyncClient):
         await self.app.db_conn.commit()
 
         await self.app.connections.donate_goal.publish(data)
+        await self.app.connections.membership_goal.publish(data)
         await self.app.connections.countdown.publish(data)
         await self.app.connections.leaderboard.publish(data)
         await self.app.managers.countdown.publish(data)

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/static/css/view/membership-goal.css" />
+        <script type="module" src="/static/js/view/membership-goal.js"></script>
+        <title>Membership Goal</title>
+    </head>
+    <body>
+        <div id="container">
+            <div id="title">{{ title }}</div>
+            <div id="bar">
+                <div id="progress" style="width: {{ [(current / goal * 100), 100] | min }}%"></div>
+                <div id="percent">{{ current }} / {{ goal }}</div>
+            </div>
+            <div id="footer">
+                <span id="zero">0</span>
+                <span id="due-date" style="display: none"></span>
+                <span id="goal">{{ goal }} KATIL</span>
+            </div>
+        </div>
+    </body>
+</html>

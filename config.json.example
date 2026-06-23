@@ -4,6 +4,11 @@
         "goal": 3000,
         "title": "Donate Goal Title"
     },
+    "membership-goal": {
+        "current": 0,
+        "goal": 100,
+        "title": "Membership Goal Title"
+    },
     "countdown": {
         "end-date": "2026-03-01T00:00:00.000000",
         "pause-date": null

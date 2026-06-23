@@ -30,6 +30,7 @@ def add_header(response):
 @login_required
 async def restart_clients():
     await app.connections.donate_goal.publish({'type': 'restart'})
+    await app.connections.membership_goal.publish({'type': 'restart'})
     await app.connections.countdown.publish('restart')
     await app.connections.leaderboard.publish({'type': 'restart'})
     return jsonify(True)
@@ -40,6 +41,7 @@ async def restart_clients():
 async def api_clients():
     return {
         'donate-goal': len(app.connections.donate_goal.connections),
+        'membership-goal': len(app.connections.membership_goal.connections),
         'countdown': len(app.connections.countdown.connections),
         'leaderboard': len(app.connections.leaderboard.connections),
         'manage_countdown': len(app.managers.countdown.connections),
