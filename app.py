@@ -1,4 +1,5 @@
-from quart import Quart
+from quart import Quart, redirect
+from quart_auth import Unauthorized
 from streamlabs import Streamlabs
 from os import getenv, listdir, path
 from locale import setlocale, LC_TIME
@@ -27,6 +28,8 @@ class CustomApp(Quart):
 
         self.managers = SimpleNamespace()
         self.managers.countdown = ConnectionHandler()
+
+        self.register_error_handler(Unauthorized, self.on_unauthorized)
 
         setlocale(LC_TIME, 'tr_TR.UTF-8')
 
@@ -59,6 +62,9 @@ class CustomApp(Quart):
                 module = import_module(f'{folder}.{file[:-3]}')
                 blueprint = getattr(module, file[:-3])
                 blueprint.register(self, options)
+
+    async def on_unauthorized(self, _):
+        return redirect("/login")
 
     async def setup_database_connection(
         self, database_file="maraton.db"
