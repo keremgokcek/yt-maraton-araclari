@@ -40,7 +40,12 @@ class Streamlabs(AsyncClient):
         self.app.app_config['donate-goal']['current'] += data.amount * mult
 
         # Membership Goal Update
-        self.app.app_config['membership-goal']['current'] += data.amount / 25
+        if data.kind == DonationType.MEMBERSHIP:
+            self.app.app_config['membership-goal']['current'] += 1
+        elif data.kind == DonationType.MEMBERSHIP_GIFT:
+            self.app.app_config['membership-goal']['current'] += (
+                data.amount / 25
+            )
 
         # Countdown Update
         countdown_cfg = self.app.app_config['countdown']
