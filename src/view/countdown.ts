@@ -11,6 +11,7 @@ enum CommandType {
     PAUSE_TIMER = 'pause_timer',
     RESUME_TIMER = 'resume_timer',
     RESTART = 'restart',
+    SHOW_REMINDER = 'show_reminder',
 }
 
 interface BaseCommand {
@@ -93,8 +94,9 @@ window.onload = () => {
                     timer.continueCountdown();
                 } else if (data.type == CommandType.RESTART) {
                     window.location.reload();
+                } else if (data.type == CommandType.SHOW_REMINDER) {
+                    timer.showReminder();
                 }
-
             }
         });
     }

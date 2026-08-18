@@ -15,10 +15,14 @@ export class Timer {
     private boxes: NodeListOf<HTMLElement>;
     private donations: HTMLElement;
 
+    private banner: HTMLElement;
+    private banner_text: HTMLElement;
+
     private end: Date;
     private animMinutes: number;
     private days_hidden: boolean;
     private stopped_seconds: number;
+    private banner_running: boolean;
 
     private step: number;
     private wait_time: number;
@@ -31,11 +35,15 @@ export class Timer {
         this.days = document.getElementById("days")!;
         this.boxes = document.querySelectorAll('.box');
         this.donations = document.getElementById("donations")!;
-        
+
+        this.banner = document.getElementById("banner")!;
+        this.banner_text = document.getElementById("banner-text")!;
+
         this.end = new Date(timestamp);
         this.animMinutes = 0;
         this.days_hidden = days_hidden;
         this.stopped_seconds = 0;
+        this.banner_running = false;
 
         this.step = 0;
         this.wait_time = 0;
@@ -43,7 +51,7 @@ export class Timer {
 
     private createDonationString(minutes: number) {
         if (minutes < 1) {
-            return `+${Math.floor(minutes*60)} SANİYE`
+            return `+${Math.floor(minutes * 60)} SANİYE`
         } else if (minutes < 20) {
             return `+${parseFloat(minutes.toFixed(2))} DAKİKA`
         } else {
@@ -60,7 +68,7 @@ export class Timer {
         var hours = Math.floor((total_seconds % (60 * 60 * 24)) / (60 * 60));
         var minutes = Math.floor((total_seconds % (60 * 60)) / 60);
         var seconds = Math.floor(total_seconds % 60);
-        return {days: days, hours: hours, minutes: minutes, seconds: seconds};
+        return { days: days, hours: hours, minutes: minutes, seconds: seconds };
     }
 
     async addTime(minutes: number) {
@@ -110,7 +118,7 @@ export class Timer {
             this.minutes.innerHTML = String(countdown.minutes).padStart(2, "0");
             this.seconds.innerHTML = String(countdown.seconds).padStart(2, "0");
             var target_seconds = this.getSeconds() + this.animMinutes * 60;
-            if (current_seconds == target_seconds) break; 
+            if (current_seconds == target_seconds) break;
             current_seconds += this.step;
             if (current_seconds > target_seconds) current_seconds = target_seconds;
             await new Promise(res => setTimeout(res, this.wait_time));
@@ -164,11 +172,11 @@ export class Timer {
             dayBox.style.display = "none";
         }, 1000)
     }
-    
+
     private showDays() {
         const dayBox = document.getElementById("day-box")!;
         dayBox.style.display = "inline";
-        setTimeout(() => {dayBox.style.opacity = "1";}, 10);
+        setTimeout(() => { dayBox.style.opacity = "1"; }, 10);
         this.boxes.forEach((box, _index) => {
             box.style.transform = `translateX(-71px)`;
             box.style.animation = `reappear 1s ease-in-out forwards`;
@@ -179,6 +187,33 @@ export class Timer {
                 box.style.animation = `none`;
             });
         }, 1000)
+    }
+
+    private showBanner(text: string) {
+        if (this.banner_running) return;
+
+        this.banner_running = true;
+
+        this.banner.classList.add("active");
+        this.banner_text.textContent = text;
+        setTimeout(() => {
+            this.banner_text.classList.add("sliding");
+            setTimeout(() => {
+                this.banner_text.classList.remove("sliding");
+                setTimeout(() => {
+                    this.banner_text.classList.add("sliding");
+                    setTimeout(() => {
+                        this.banner_text.classList.remove("sliding");
+                        this.banner.classList.remove("active");
+                        this.banner_running = false;
+                    }, 11000);
+                }, 100);
+            }, 10000);
+        }, 1500);
+    }
+
+    showReminder() {
+        this.showBanner(`SAYAÇ ${this.end.getHours()}.${this.end.getMinutes()}'DE BİTİYOR               DESTEKLERİ UNUTMAYALIM`);
     }
 
     createDonation(time: number, name: string) {
@@ -196,7 +231,7 @@ export class Timer {
         donation.appendChild(donatorName);
         donation.appendChild(donateAmount);
         this.donations.appendChild(donation);
-        
+
         setTimeout(() => {
             donation.classList.add('remove-donation');
             setTimeout(() => {

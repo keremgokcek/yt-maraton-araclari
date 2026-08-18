@@ -12,6 +12,7 @@ body {
 
 div.container {
     display: flex;
+    position: relative;
 }
 
 div.box {
@@ -35,6 +36,8 @@ div.digits {
     border: 2px solid black;
     border-radius: 5px;
     background-color: #f0f0f0;
+    z-index: 10;
+    position: relative;
 }
 
 div.identifier {
@@ -159,4 +162,42 @@ div#new-donation-box {
         transform: translateY(-100px);
         opacity: 0;
     }
+}
+
+/* Banner */
+
+#banner {
+    position: absolute;
+    width: 412px; /* width of timer expect outer margins */
+    height: 80px;
+    top: 0;
+    right: 10px; /* right outer margin of timer */
+    border: 2px solid black;
+    border-radius: 5px;
+    background-image: linear-gradient(to right top, #f20000, #c10011, #900014, #600010, #340000);
+    box-sizing: border-box;
+    opacity: 0;
+    transition: opacity 1.5s ease-out, top 1.5s ease-out; 
+    overflow: hidden;
+}
+
+#banner.active {
+    top: 144px;
+    opacity: 1;
+}
+
+#banner span {
+    color: white;
+    line-height: 76px;
+    font-size: 48px;
+    position: absolute;
+    white-space: preserve nowrap;
+    left: 100%;
+    transform: translateX(0);
+}
+
+#banner span.sliding {
+    transform: translateX(-100%);
+    left: 0;
+    transition: transform 10s linear, left 10s linear;
 }

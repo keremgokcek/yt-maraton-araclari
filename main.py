@@ -36,6 +36,13 @@ async def restart_clients():
     return jsonify(True)
 
 
+@app.route('/show-reminder')
+@login_required
+async def show_reminder():
+    await app.connections.countdown.publish({'type': 'show_reminder'})
+    return jsonify(True)
+
+
 @app.route('/api/clients')
 @login_required
 async def api_clients():
