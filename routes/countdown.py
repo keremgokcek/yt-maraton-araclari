@@ -10,8 +10,8 @@ from asyncio import gather
 
 countdown = Blueprint('countdown', __name__, template_folder='templates')
 
-DEF_TIME = 0.3
-YT_TIME = 0.15
+DEF_TIME = 0.25
+YT_TIME = 0.1
 
 
 class EventType(Enum):

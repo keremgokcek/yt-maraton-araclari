@@ -1,8 +1,8 @@
 export const DEF_MULT = 1.0
 export const YT_MULT = 0.65
 
-export const DEF_TIME = 0.3;
-export const YT_TIME = 0.15;
+export const DEF_TIME = 0.25;
+export const YT_TIME = 0.1;
 
 export enum DonationType {
     DONATION = "donation",

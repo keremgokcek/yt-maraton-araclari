@@ -12,8 +12,8 @@ URL = "https://sockets.streamlabs.com?token={}"
 DEF_MULT = 1.0
 YT_MULT = 0.65
 
-DEF_TIME = 0.3
-YT_TIME = 0.15
+DEF_TIME = 0.25
+YT_TIME = 0.1
 
 USD_TO_TRY = 39.83
 EUR_TO_TRY = 46.79
