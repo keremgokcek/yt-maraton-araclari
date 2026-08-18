@@ -62,9 +62,7 @@ function add_submit() {
 function set_submit() {
     if (confirm('Bu işlem mevcut süreyi sıfırlayacaktır. Devam etmek istediğinize emin misiniz?')) {
         const dateInput = document.getElementById('date') as HTMLInputElement;
-        const date = dateInput.valueAsDate!.getTime();
-        if (!date) return;
-        ws.send(JSON.stringify({ date: date, type: 'set_time' }));
+        ws.send(JSON.stringify({ date: dateInput.valueAsNumber, type: 'set_time' }));
     }
 }
 

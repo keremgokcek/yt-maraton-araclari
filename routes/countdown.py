@@ -252,7 +252,9 @@ async def manage_socket():
                 )
             elif json_data['type'] == 'set_time':
                 print(json_data)
-                new_date = datetime.fromtimestamp(json_data['date'] / 1000)
+                new_date = datetime.fromtimestamp(
+                    json_data['date'] / 1000, timezone.utc
+                ).replace(tzinfo=None)
                 config['end-date'] = new_date.isoformat()
                 config['pause-date'] = None
                 current_app.update_config()
@@ -261,7 +263,9 @@ async def manage_socket():
                     f"Sayaç {new_date.strftime('%-d %B %Y %H.%M')} tarihine ayarlandı."
                 )
 
-                await current_app.connections.countdown.publish(message)
+                await current_app.connections.countdown.publish(
+                    {'type': 'set_time', 'date': new_date.timestamp() * 1000}
+                )
                 await current_app.managers.countdown.publish(log)
 
                 current_app.log_event(
