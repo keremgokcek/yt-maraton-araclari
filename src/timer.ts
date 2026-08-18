@@ -213,7 +213,7 @@ export class Timer {
     }
 
     showReminder() {
-        this.showBanner(`SAYAÇ ${this.end.getHours()}.${this.end.getMinutes()}'DE BİTİYOR               DESTEKLERİ UNUTMAYALIM`);
+        this.showBanner(`SAYAÇ ${this.end.getHours()}.${this.end.getMinutes()}'DE BİTİYOR               DESTEKLER İÇİN TEŞEKKÜRLER`);
     }
 
     createDonation(time: number, name: string) {
