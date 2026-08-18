@@ -82,7 +82,9 @@ async def view():
 
 @countdown.websocket('/view/countdown')
 async def view_socket():
-    await websocket.send(f'countdown {int(get_date().timestamp()*1000)}')
+    await websocket.send_json(
+        {'type': 'set_time', 'date': int(get_date().timestamp() * 1000)}
+    )
 
     async def sender() -> None:
         async for data in current_app.connections.countdown.subscribe():
@@ -94,7 +96,7 @@ async def view_socket():
                     }
                 )
             else:
-                await websocket.send(data)
+                await websocket.send_json(data)
 
     await gather(sender(), reply_pings())
 
@@ -193,7 +195,7 @@ async def manage_socket():
 
                 log['message'] = 'Sayaç durduruldu.'
 
-                await current_app.connections.countdown.publish(message)
+                await current_app.connections.countdown.publish(json_data)
                 await current_app.managers.countdown.publish(log)
 
                 current_app.log_event(
@@ -215,7 +217,7 @@ async def manage_socket():
 
                 log['message'] = 'Sayaç devam ettirildi.'
 
-                await current_app.connections.countdown.publish(message)
+                await current_app.connections.countdown.publish(json_data)
                 await current_app.managers.countdown.publish(log)
 
                 current_app.log_event(
@@ -238,7 +240,7 @@ async def manage_socket():
                     else f"{json_data['time']} dakika eklendi."
                 )
 
-                await current_app.connections.countdown.publish(message)
+                await current_app.connections.countdown.publish(json_data)
                 await current_app.managers.countdown.publish(log)
 
                 current_app.log_event(

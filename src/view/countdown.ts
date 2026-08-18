@@ -72,15 +72,7 @@ window.onload = () => {
         ws.addEventListener('message', async (event) => {
             console.log('Message from server:', event.data);
 
-            if (event.data.startsWith('countdown')) {
-                timer.setNewTime(parseInt(event.data.split(' ')[1]));
-            } else if (event.data == 'stop') {
-                timer.stopCountdown();
-            } else if (event.data == 'start') {
-                timer.continueCountdown();
-            } else if (event.data == 'restart') {
-                window.location.reload()
-            } else if (event.data == 'pong') {
+            if (event.data == 'pong') {
                 // Do nothing
             } else {
                 const data: Command = JSON.parse(event.data);

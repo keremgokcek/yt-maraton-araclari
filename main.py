@@ -31,7 +31,7 @@ def add_header(response):
 async def restart_clients():
     await app.connections.donate_goal.publish({'type': 'restart'})
     await app.connections.membership_goal.publish({'type': 'restart'})
-    await app.connections.countdown.publish('restart')
+    await app.connections.countdown.publish({'type': 'restart'})
     await app.connections.leaderboard.publish({'type': 'restart'})
     return jsonify(True)
 
