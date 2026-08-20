@@ -213,7 +213,9 @@ export class Timer {
     }
 
     showReminder() {
-        this.showBanner(`SAYAÇ ${this.end.getHours()}.${this.end.getMinutes()}'DE BİTİYOR               DESTEKLER İÇİN TEŞEKKÜRLER`);
+        let hours = this.end.getHours().toString().padStart(2, '0');
+        let minutes = this.end.getMinutes().toString().padStart(2, '0');
+        this.showBanner(`SAYAÇ ${hours}.${minutes}'DE BİTİYOR               DESTEKLER İÇİN TEŞEKKÜRLER`);
     }
 
     createDonation(time: number, name: string) {
